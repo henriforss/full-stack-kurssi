@@ -1,16 +1,9 @@
 const Course = ({course}) => {
-    console.log(course)
     return (
       <div>
-        <h1>Web development curriculum</h1>
-        {course.map((course) =>
-            <div>
-              <Header key={"Header: " + course.id} course={course} />
-              <Content key={"Content: " + course.id} course={course} />
-              <Total key={"Total: " + course.id} course={course} />
-            </div>
-          )
-        }
+        <Header course={course} />
+        <Content course={course} />
+        <Total course={course} />
       </div>
     )
   }
@@ -24,12 +17,12 @@ const Course = ({course}) => {
     )
   }
   
-  
+
   const Content = ({course}) => {
     return(
       <div>
         {course.parts.map(part =>
-            <Part key={"Part: " + course.id + "." + part.id} name={part.name} exercises={part.exercises} />
+            <Part key={part.id} name={part.name} exercises={part.exercises} />
         )}
       </div>
     )
