@@ -12,19 +12,6 @@ const FindForm = (props) => {
   )
 }
 
-/* Jos maita on korkeintaan kymmenen, näytä lista maista plus nappi,
-jota klikkaamalla pääse kyseisen maan tietoihin. */
-const ShowCountry = (props) => {
-  const handlebutton = () => {
-    props.setCountries([props.country])
-  }
-  return (
-    <div>
-      {props.country.name}<button onClick={handlebutton}>Show</button>
-    </div>
-  )
-}
-
 /* Näyttää valitun maan kielet. */
 const ShowLanguage = (props) => {
   return (
@@ -56,6 +43,21 @@ const ShowDetails = (props) => {
       <div>
         <img src={country.flags.png} width="150"/>
       </div>
+    </div>
+  )
+}
+
+/* Jos maita on korkeintaan kymmenen, näytä lista maista plus nappi,
+jota klikkaamalla pääse kyseisen maan tietoihin. Tämä ei toimi
+täydellisesti, jos haluat uusia haun joudut painamaan enter 
+lomakkeessa. */
+const ShowCountry = (props) => {
+  const handlebutton = () => {
+    props.setCountries([props.country])
+  }
+  return (
+    <div>
+      {props.country.name}<button onClick={handlebutton}>Show</button>
     </div>
   )
 }
