@@ -12,10 +12,16 @@ const FindForm = (props) => {
   )
 }
 
+/* Jos maita on korkeintaan kymmenen, näytä lista maista plus nappi,
+jota klikkaamalla pääse kyseisen maan tietoihin. */
 const ShowCountry = (props) => {
+  console.log(props)
+  console.log(props.country)
+  console.log(props.setCountries)
+
   return (
     <div>
-      {props.name}<button onClick={() => console.log(props.name)}>Show</button>
+      {props.country.name}<button onClick={() => props.setCountries[props.country]}>Show</button>
     </div>
   )
 }
@@ -71,7 +77,8 @@ const ShowFilteredCountries = (props) => {
         {props.countries.map(country =>
           <ShowCountry
             key={country.name}
-            name={country.name}
+            country={country}
+            setCountries={props.setCountries}
           />
         )}
       </div>
@@ -100,7 +107,6 @@ function App() {
   /* Määritellään muuttujia ja listoja useStaten avulla. */
   const [countries, setCountries] = useState([])
   const [findWith, setFindWith] = useState("")
-  // const [showAllCountries, setShowAllCountries] = useState(true)
 
   /* Haetaan tiedot axios:in avulla ja tallennetaan ne muuttujaan. */
   const hook = () => {
@@ -115,7 +121,7 @@ function App() {
   useEffect(hook, [])
 
   /* Filtteröintilomakkeen tapahtumankäsittelijä. Seurataan mitä 
-  input-kentässä tapahtuu ja päivitetään finWith:in arvoa. */
+  input-kentässä tapahtuu ja päivitetään findWith:in arvoa. */
   const handleFindWith = (event) => {
     setFindWith(event.target.value)
   }
@@ -136,6 +142,7 @@ function App() {
       <div>
         <ShowFilteredCountries
           countries={findCountries}
+          setCountries={setCountries}
         />
       </div>
     </div>
