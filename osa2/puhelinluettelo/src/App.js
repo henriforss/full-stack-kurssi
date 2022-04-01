@@ -9,7 +9,6 @@ const FilterForm = (props) => {
         filter with: <input value={props.filter} 
         onChange={props.filterchange} />
       </div>
-
     </form>
   )
 }
