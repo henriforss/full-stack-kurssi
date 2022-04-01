@@ -15,13 +15,12 @@ const FindForm = (props) => {
 /* Jos maita on korkeintaan kymmenen, näytä lista maista plus nappi,
 jota klikkaamalla pääse kyseisen maan tietoihin. */
 const ShowCountry = (props) => {
-  console.log(props)
-  console.log(props.country)
-  console.log(props.setCountries)
-
+  const handlebutton = () => {
+    props.setCountries([props.country])
+  }
   return (
     <div>
-      {props.country.name}<button onClick={() => props.setCountries[props.country]}>Show</button>
+      {props.country.name}<button onClick={handlebutton}>Show</button>
     </div>
   )
 }
