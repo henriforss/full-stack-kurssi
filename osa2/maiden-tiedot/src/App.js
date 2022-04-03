@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import './App.css'
+import { useState, useEffect } from "react";
+import axios from "axios";
+import "./App.css"
+import "./index.css"
 
 /* Funktio filtteröinti-lomakkeen näyttämiseen. */
 const FindForm = (props) => {
@@ -40,7 +41,7 @@ const ShowDetails = (props) => {
           )}
         </div>
       </ul>
-      <div>
+      <div className="flagstyle">
         <img src={country.flags.png} width="150"/>
       </div>
     </div>
@@ -87,7 +88,7 @@ const ShowFilteredCountries = (props) => {
   } else if (props.countries.length === 1) {
     const selected = props.countries[0]
     return (
-      <div>
+      <div className="detailsstyle">
         <ShowDetails
           country={selected}
         />
@@ -132,15 +133,15 @@ function App() {
     (country.name).toLowerCase().includes(findWith))
 
   return (
-    <div>
+    <div className="appstyle">
       <h1>Countries</h1>
-      <div>
+      <div className="formstyle">
         <FindForm
           findvalue = {findWith}
           findvaluechange = {handleFindWith}
         />
       </div>
-      <div>
+      <div className="infostyle">
         <ShowFilteredCountries
           countries={findCountries}
           setCountries={setCountries}
