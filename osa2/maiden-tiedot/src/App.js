@@ -13,21 +13,13 @@ const FindForm = (props) => {
   )
 }
 
-
-
-
-/* TÄMÄ EI TOIMI! OHJELMA JUMITTUU JOS API:STA EI OLE TULLUT TIETOJA
-ENNEN KUIN NIITÅ YRITETÄÄN NÄYTTÄÄ. JOS KYSEISET weather-MUUTTUJAAN
-LIITTYVÄT KOHDAT MERKATAAN POIS JA ANNETAAN OHJELMAN LADATA TIEDOT 
-RAUHASSA, NE TULEVAT PERILLE JA NIITÄ VOI SEN JÄLKEEN KÄYTTÄÄ. */
-
 /* Funktio talletta API-avaimen ja URL-osoitteen muuttujiin, 
 asettaa searchParams API:n mallin mukaan, hakee tiedot use Staten avulla
 ja tulostaa ne näytölle. */
 const ShowWeather = (props) => {
 
   /* Määritellään uusi muuttuja use Staten avulla. */
-  const [weather, setWeather] = useState([])
+  const [weather, setWeather] = useState(null)
 
   /* Otetaan käyttöön API-avain, joka on määritelty npm:n käynnistyksen
   yhteydessä. */
@@ -54,7 +46,7 @@ const ShowWeather = (props) => {
   useEffect(getWeather, [])
 
   /* Määritellään uusi URL-objekti jonka kautta saadaan sää-ikoni. */
-  const weatherIcon = weather.weather[0].icon
+  const weatherIcon = weather?.weather[0].icon
   const iconUrl = new URL(`http://openweathermap.org/img/wn/${weatherIcon}@2x.png`)
 
   /* Palautetaan tietoja. */
@@ -62,23 +54,18 @@ const ShowWeather = (props) => {
     <div>
       <h3>Weather in {props.city}</h3>
       <div>
-        Temperature: {weather.main.temp} Celsius
+        Temperature: {weather?.main.temp} Celsius
       </div>
       <div>
         <img src={iconUrl} />
       </div>
       <div>
-        Wind: {weather.wind.speed}
+        Wind: {weather?.wind.speed} m/s
       </div>
     </div>
   ) 
 }
  
-
-
-
-
-
 /* Näyttää valitun maan kielet. */
 const ShowLanguage = (props) => {
   return (
@@ -95,8 +82,8 @@ const ShowDetails = (props) => {
     <div>
       <h2>{country.name}</h2>
       <div>Capital: {country.capital}</div>
-      <div>Area: {country.area}</div>
-      <div>Test: {country.currencies[0]["code"]}</div>
+      <div>Area: {country.area} km²</div>
+      <div>Currency: {country.currencies[0]["code"]}</div>
       <h3>Languages:</h3>
       <ul>
         <div>
