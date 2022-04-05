@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import numberService from "./services/numberservices"
 
 /* Funktio filtteröinti-lomakkeen näyttämiseen. */
 const FilterForm = (props) => {
@@ -36,10 +37,12 @@ const ShowPhonebook = (props) => {
   return (
     <div>
       {props.persons.map(person => 
-        <ShowNameNumber 
+        <ShowNameNumber
+          id={person.id} 
           key={person.name} 
           name={person.name} 
-          number={person.number} />
+          number={person.number}
+          deletePerson={props.deletePerson} />
       )} 
     </div>
   )
@@ -49,7 +52,8 @@ const ShowPhonebook = (props) => {
 const ShowNameNumber = (props) => {
   return (
     <div>
-      {props.name} {props.number}
+      {props.name} {props.number} {" "}
+      <button onClick={() => props.deletePerson(props.id)}>Delete</button>
     </div>
   )
 }
@@ -65,26 +69,21 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("")
   const [filterWith, setFilterWith] = useState("")
 
-  /* Määritellään muuttuja jolla haetaan puhelinluettelon tiedot
-  palvelimelta axios:in avulla ja asetetaan ne persons-muuttujaan 
-  setPersons-funktion (?) avulla. */
-  const hook = () => {
-    axios
-    .get("http://localhost:3001/persons")
-    .then(response => {
-      setPersons(response.data)
-    })
-  }
-
-  /* Kutsutaan useEffectia parametrilla hook ja tyhjällä listalla,
-  joka tarkoittaa että efekti suoritetaan vain kerran ohjelman
-  käynnistyessä. */
-  useEffect(hook, [])
+  /* Käytetään useEffect:ia ja numberService:a hakemaan tiedot 
+  palvelimelta, ja asetetaan tiedot muuttujaan persons setPersons:in
+  avulla ohjelman käynnistyessä. */
+  useEffect(() => {
+    numberService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)})
+  }, [])
 
   /* Funktio uuden henkilön lisäämiseen. Estetään default-toiminta,
   tarkastetaan (hieman kömpelösti) jos henkilön nimi löytyy listasta,
-  ja jos ei löydy, lisätään tiedot useStatessa määriteltyjen apuvälineiden
-  avulla.   */
+  ja jos ei löydy, lähetetään tiedot palvelimella ja 
+  lisätään palvelimelta palautettu numero-olio
+  useStatessa määriteltyjen apuvälineiden avulla näytettävään listaan. */
   const addPerson = (event) => {
     event.preventDefault() 
     const found = persons.filter(person => person.name === newName)
@@ -93,11 +92,25 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-      setPersons(persons.concat(personObject))
+
+      numberService
+        .createNew(personObject)
+        .then(addedPerson => {
+          setPersons(persons.concat(addedPerson))
+        })
+        
       setNewName("")
       setNewNumber("")
     } else {
-      alert(`${newName} is already in phonebook`)
+        if (window.confirm(`${newName} is already added to phonebook,
+        replace the old number with a new one?`) === true) {
+          const updatePerson = persons.find(person => person.name === newName)
+          updatePerson.number = newNumber
+          
+          numberService
+            .changeNumber(updatePerson.id, updatePerson)
+            .then(console.log("number changed")  )
+        }
       setNewName("")
       setNewNumber("")
     }
@@ -122,6 +135,23 @@ const App = () => {
   /* Funktio jonka avulla filtteröidään hebkilöitä. */
   const filterPersons = persons.filter(person => 
     (person.name).toLowerCase().includes(filterWith))
+
+  /* Funktio jonka avulla poistetaan henkilö puhelinluettelosta. */
+  const deletePersonId = (id) => {
+    // alert("WTF!")
+    const person = persons.find(person => person.id === id)
+    console.log(person)
+
+    if (window.confirm(`Delete ${person.name}?`) === true) {
+      numberService
+        .deleteEntry(id)
+        .then(console.log("deleted"))
+  
+        setPersons(persons.filter(person => person.id !== id))
+    } else {
+      console.log("canceled")
+    }
+  }
   
   return (
     <div>
@@ -138,7 +168,9 @@ const App = () => {
         numberchange={handleNumberChange}/>
       <h2>Numbers</h2>
       <ShowPhonebook
-        persons={filterPersons} />
+        persons={filterPersons}
+        deletePerson={deletePersonId}  
+      />
     </div>
   )
 }
