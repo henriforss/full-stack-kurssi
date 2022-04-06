@@ -7,13 +7,8 @@
     },
     {
       "name": "Margaret",
-      "number": "999",
+      "number": "888",
       "id": 11
-    },
-    {
-      "name": "Dude",
-      "number": "99887765",
-      "id": 13
     },
     {
       "name": "Andy Donald",
@@ -29,6 +24,16 @@
       "name": "George",
       "number": "334455",
       "id": 16
+    },
+    {
+      "name": "John",
+      "number": "9999",
+      "id": 17
+    },
+    {
+      "name": "Mikko",
+      "number": "999",
+      "id": 18
     }
   ]
 }

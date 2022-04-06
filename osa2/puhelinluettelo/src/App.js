@@ -2,6 +2,20 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import numberService from "./services/numberservices"
 
+/* Komponentti joka ilmoittaa kun uusi henkilö on
+lisätty onnistuneesti. */
+const Notification = (props) => {
+  if (props.message === null) {
+    return null
+  } else {
+    return (
+      <div className={props.style}>
+        {props.message}
+      </div>
+    )
+  }
+}
+
 /* Funktio filtteröinti-lomakkeen näyttämiseen. */
 const FilterForm = (props) => {
   return (
@@ -68,6 +82,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState("")
   const [filterWith, setFilterWith] = useState("")
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notificationStyle, setNotificationStyle] = useState(null)
 
   /* Käytetään useEffect:ia ja numberService:a hakemaan tiedot 
   palvelimelta, ja asetetaan tiedot muuttujaan persons setPersons:in
@@ -101,6 +117,12 @@ const App = () => {
         
       setNewName("")
       setNewNumber("")
+
+      setNotificationStyle("succes")
+      setNotificationMessage(`${newName} added succesfully!`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
     } else {
         if (window.confirm(`${newName} is already added to phonebook,
         replace the old number with a new one?`) === true) {
@@ -109,7 +131,23 @@ const App = () => {
           
           numberService
             .changeNumber(updatePerson.id, updatePerson)
-            .then(console.log("number changed")  )
+            .then(response => {
+              console.log(response)
+              setNotificationStyle("succes")
+              setNotificationMessage(`${newName} number changed!`)
+              setTimeout(() => {
+                setNotificationMessage(null)
+              }, 5000)
+            })
+            .catch(error => {
+              console.log(error)
+              setNotificationStyle("error")
+              setNotificationMessage(`ERROR! ${newName} not on server.`)
+              setTimeout(() => {
+                setNotificationMessage(null)
+              }, 5000)
+              setPersons(persons.filter(person => person.id !== updatePerson.id))
+            })
         }
       setNewName("")
       setNewNumber("")
@@ -138,16 +176,19 @@ const App = () => {
 
   /* Funktio jonka avulla poistetaan henkilö puhelinluettelosta. */
   const deletePersonId = (id) => {
-    // alert("WTF!")
     const person = persons.find(person => person.id === id)
-    console.log(person)
-
     if (window.confirm(`Delete ${person.name}?`) === true) {
       numberService
         .deleteEntry(id)
-        .then(console.log("deleted"))
-  
-        setPersons(persons.filter(person => person.id !== id))
+        .then(response => {
+          console.log(response)
+          setNotificationStyle("succes")
+          setNotificationMessage(`${person.name} deleted!`)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
+          setPersons(persons.filter(person => person.id !== id))
+        })     
     } else {
       console.log("canceled")
     }
@@ -156,6 +197,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification
+        message={notificationMessage}
+        style={notificationStyle}/>
       <FilterForm 
         filter={filterWith} 
         filterchange={handleFilterWith} />
