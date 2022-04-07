@@ -20,7 +20,6 @@ let persons = [
 
 /* Create an express-object called "app" that is a function. */
 const express = require("express")
-const req = require("express/lib/request")
 const app = express()
 
 /* Get all entries in "persons". */
@@ -31,9 +30,7 @@ app.get("/api/persons", (request, response) => {
 /* Get info at "/info". */
 app.get("/info", (request, response) => {
     const personsTotal = persons.length
-    console.log(personsTotal, typeof personsTotal)
     const date = new Date()
-    console.log(date)
     response.send(`Phonebook has info on ${personsTotal} persons. <br/> 
         ${date}`)
 })
@@ -42,7 +39,6 @@ app.get("/info", (request, response) => {
 app.get("/api/persons/:id", (request, response) => {
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id)
-
     if (person) {
         response.json(person)
     } else {
@@ -53,9 +49,7 @@ app.get("/api/persons/:id", (request, response) => {
 /* Delete person by "id". */
 app.delete("/api/persons/:id", (request, response) => {
     const id = Number(request.params.id)
-    console.log(persons)
     persons = persons.filter(person => person.id !== id)
-    console.log(persons)
     response.status(204).end()
 })
 
