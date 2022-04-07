@@ -18,9 +18,6 @@ let persons = [
     },
 ]
 
-const { response } = require("express")
-const { request } = require("express")
-
 /* Create an express-object called "app" that is a function. */
 const express = require("express")
 const req = require("express/lib/request")
