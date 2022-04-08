@@ -18,14 +18,24 @@ let persons = [
     },
 ]
 
-/* Create an express-object called "app" that is a function. */
+/* "Import" express and morgan. */
 const express = require("express")
+const morgan = require("morgan")
+
+/* Create an express-object called "app" that is a function. */
 const app = express()
 
-/* Enable json-parser for parsing POST-requests. */
+/* Enable built-in middleware "json-parser" for parsing POST-requests. */
 app.use(express.json())
 
-/* Get all entries in "persons". */
+/* Enable and configure external middleware "morgan" for console logging. */
+morgan.token("body", (request, response) => {
+    const body = JSON.stringify(request.body)
+    return body
+})
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"))
+
+/* Get all entries in route "persons". */
 app.get("/api/persons", (request, response) => {
     response.json(persons)
 })
