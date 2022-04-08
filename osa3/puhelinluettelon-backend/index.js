@@ -22,6 +22,9 @@ let persons = [
 const express = require("express")
 const app = express()
 
+/* Enable json-parser for parsing POST-requests. */
+app.use(express.json())
+
 /* Get all entries in "persons". */
 app.get("/api/persons", (request, response) => {
     response.json(persons)
@@ -51,6 +54,37 @@ app.delete("/api/persons/:id", (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
     response.status(204).end()
+})
+
+/* Add new person. Requires json-parser to be enabled further up. */
+app.post("/api/persons", (request, response) => {
+    const body = request.body
+
+    if (!body.name) {
+        return response.status(400).json({
+            "Error": "No name."
+        })
+    }
+
+    if (!body.number) {
+        return response.status(400).json({
+            "Error": "No number."
+        })
+    }
+
+    if (persons.find(person => person.name === body.name)) {
+        return response.status(400).json({
+            "Error": "Name taken. Choose another name."
+        })
+    }
+
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: Math.floor(Math.random() * 10000)
+    }  
+    persons = persons.concat(person)
+    response.json(person)
 })
 
 /* Listen to port for connections/requests. */
