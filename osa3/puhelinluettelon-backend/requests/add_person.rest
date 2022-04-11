@@ -1,7 +1,7 @@
-POST http://localhost:3001/api/persons
+POST https://serene-peak-50953.herokuapp.com/api/persons
 Content-Type: application/json
 
 {
-    "name": "Tele Phone",
+    "name": "Tele Phone 2",
     "number": "123-5678"
 }
