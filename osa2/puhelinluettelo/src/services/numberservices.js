@@ -1,7 +1,7 @@
 import axios from "axios"
 
 /* Määritellään baseURL. */
-const baseURL = "http://localhost:3001/api/persons"
+const baseURL = "/api/persons"
 
 /* Luodaan funktio getAll, joka hakee palvelimella olevat tiedot.
 Muutetaan vastausta siten, että fuktio palauttaa uuden
