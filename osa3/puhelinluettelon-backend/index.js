@@ -39,6 +39,9 @@ app.use(morgan(":method :url :status :res[content-length] - :response-time ms :b
 /* Enable cors */
 app.use(cors())
 
+/* Enable built-in middleware static.  */
+app.use(express.static("build"))
+
 /* Get all entries in route "persons". */
 app.get("/api/persons", (request, response) => {
     response.json(persons)
