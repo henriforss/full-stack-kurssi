@@ -21,6 +21,7 @@ let persons = [
 /* "Import" express and morgan. */
 const express = require("express")
 const morgan = require("morgan")
+const cors = require("cors")
 
 /* Create an express-object called "app" that is a function. */
 const app = express()
@@ -34,6 +35,9 @@ morgan.token("body", (request, response) => {
     return body
 })
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"))
+
+/* Enable cors */
+app.use(cors())
 
 /* Get all entries in route "persons". */
 app.get("/api/persons", (request, response) => {
@@ -98,7 +102,7 @@ app.post("/api/persons", (request, response) => {
 })
 
 /* Listen to port for connections/requests. */
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
