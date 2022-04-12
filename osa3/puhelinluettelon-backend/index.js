@@ -1,27 +1,13 @@
-/* Hardcoded entries for testing. */
-let persons = [
-    {   id: 1,
-        name: "George Pullman",
-        number: "555-9876",
-    },
-    {   id: 2,
-        name: "King Kong",
-        number: "765-8877",
-    },
-    {   id: 3,
-        name: "Miss Terious",
-        number: "645-8765",
-    },
-    {   id: 4,
-        name: "Amanda Duckface",
-        number: "888-7766",
-    },
-]
+/* Require dotenv in order to use .env-file */
+require("dotenv").config()
 
-/* "Import" express and morgan. */
+/* "Import" express, cors and morgan. */
 const express = require("express")
 const morgan = require("morgan")
 const cors = require("cors")
+
+/* Import custom mongoose module from models/person.js. */
+const Person = require("./models/person")
 
 /* Create an express-object called "app" that is a function. */
 const app = express()
@@ -44,7 +30,9 @@ app.use(express.static("build"))
 
 /* Get all entries in route "persons". */
 app.get("/api/persons", (request, response) => {
-    response.json(persons)
+    Person.find({}).then(persons => {
+        response.json(persons)
+    })
 })
 
 /* Get info at "/info". */
@@ -89,23 +77,18 @@ app.post("/api/persons", (request, response) => {
         })
     }
 
-    if (persons.find(person => person.name === body.name)) {
-        return response.status(400).json({
-            "Error": "Name taken. Choose another name."
-        })
-    }
-
-    const person = {
+    const person = new Person({
         name: body.name,
-        number: body.number,
-        id: Math.floor(Math.random() * 10000)
-    }  
-    persons = persons.concat(person)
-    response.json(person)
+        number: body.number
+    })
+
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 /* Listen to port for connections/requests. */
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
