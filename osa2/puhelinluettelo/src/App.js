@@ -133,7 +133,10 @@ const App = () => {
         if (window.confirm(`${newName} is already added to phonebook,
         replace the old number with a new one?`) === true) {
           const updatePerson = persons.find(person => person.name === newName)
+          const oldNumber = updatePerson.number
+          console.log(oldNumber)
           updatePerson.number = newNumber
+          console.log(oldNumber)
           
           numberService
             .changeNumber(updatePerson.id, updatePerson)
@@ -144,19 +147,19 @@ const App = () => {
               setTimeout(() => {
                 setNotificationMessage(null)
               }, 5000)
+              setNewName("")
+              setNewNumber("")
             })
             .catch(error => {
               console.log(error)
+              updatePerson.number = oldNumber
               setNotificationStyle("error")
-              setNotificationMessage(`ERROR! ${newName} not on server.`)
+              setNotificationMessage(`Number must be format 12-123456 or 123-12345.`)
               setTimeout(() => {
                 setNotificationMessage(null)
               }, 5000)
-              setPersons(persons.filter(person => person.id !== updatePerson.id))
             })
         }
-      setNewName("")
-      setNewNumber("")
     }
   }
   
