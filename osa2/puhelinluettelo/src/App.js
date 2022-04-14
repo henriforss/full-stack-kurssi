@@ -96,7 +96,7 @@ const App = () => {
 
   /* Funktio uuden henkilön lisäämiseen. Estetään default-toiminta,
   tarkastetaan (hieman kömpelösti) jos henkilön nimi löytyy listasta,
-  ja jos ei löydy, lähetetään tiedot palvelimella ja 
+  ja jos ei löydy, lähetetään tiedot palvelimelle ja 
   lisätään palvelimelta palautettu numero-olio
   useStatessa määriteltyjen apuvälineiden avulla näytettävään listaan. */
   const addPerson = (event) => {
@@ -112,16 +112,23 @@ const App = () => {
         .createNew(personObject)
         .then(addedPerson => {
           setPersons(persons.concat(addedPerson))
+          setNewName("")
+          setNewNumber("")
+          setNotificationStyle("succes")
+          setNotificationMessage(`${newName} added succesfully!`)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
+        })
+        .catch(error => {
+          console.log(error.response.data)
+          setNotificationStyle("error")
+          setNotificationMessage(`${error.response.data.error}`)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
         })
         
-      setNewName("")
-      setNewNumber("")
-
-      setNotificationStyle("succes")
-      setNotificationMessage(`${newName} added succesfully!`)
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 5000)
     } else {
         if (window.confirm(`${newName} is already added to phonebook,
         replace the old number with a new one?`) === true) {

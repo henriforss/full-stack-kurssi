@@ -1,4 +1,4 @@
-/* This file creates a Person-model that is used for 
+/* This file creates a Mongoose model called that is used for 
 all communication between app and database. */
 
 /* Import mongoose. */
@@ -19,8 +19,16 @@ mongoose.connect(url)
 
 /* Create a schema. */
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String
+    name: {
+        type: String,
+        minlength: 3
+    },
+    number: {
+        type: String,
+        validate: (input) => {
+            return /(^\d{2}-\d{6})|(^\d{3}-\d{5})/.test(input)
+        }
+    }
 })
 
 /* Set schema. That is, convert everything to json/plain text. */

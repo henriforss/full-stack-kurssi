@@ -18,7 +18,9 @@ Uses function next(). Enable last in script. */
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
     if (error.name === "CastError") {
-        return response.status(400).send({ error: "malformatted id" })
+        return response.status(400).send({ error: "Malformatted id." })
+    } else if (error.name === "ValidationError") {
+        return response.status(400).send({ error: "Name must be min 3 characters. Number must be format 123-12345 or 12-123456."})
     }
     next(error)
 }
@@ -85,15 +87,11 @@ app.post("/api/persons", (request, response, next) => {
     const body = request.body
 
     if (!body.name) {
-        return response.status(400).json({
-            "Error": "No name."
-        })
+        return response.status(400).json({ error: "No name." })
     }
 
     if (!body.number) {
-        return response.status(400).json({
-            "Error": "No number."
-        })
+        return response.status(400).json({ error: "No number." })
     }
 
     const person = new Person({
