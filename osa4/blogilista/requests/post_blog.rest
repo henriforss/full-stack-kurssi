@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Modern Rockets",
-  "author": "Amanda Jackson",
-  "url": "http://www.modernrockets.com",
-  "likes": 7
+  "title": "Other Peoples Problems",
+  "author": "Lisa McNamara",
+  "url": "http://www.helpme.com",
+  "likes": 3
 }
