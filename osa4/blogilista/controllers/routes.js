@@ -2,10 +2,10 @@
 
 /* Import necessary modules. */
 const Blog = require("../models/blog")
-const expressApp = require("express")
+const express = require("express")
 
 /* Create a new router object from express application. */
-const blogRouter = expressApp.Router()
+const blogRouter = express.Router()
 
 /* Get all blog posts. */
 blogRouter.get("/", (request, response) => {
