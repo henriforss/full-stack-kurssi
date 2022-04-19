@@ -120,8 +120,7 @@
         
         console.log("Grouped:", grouped)
 
-        /* Select largest group and return "author"
-        and number of blogs. */
+        /* Order group according to size. */
         const ordered = _.orderBy(grouped, _.size)
         
         console.log("Ordered:", ordered)
@@ -131,7 +130,8 @@
 
         console.log("Reversed:", reversed)
 
-        /* Select the biggest group and log info. */
+        /* Select largest group and return "author"
+        and number of blogs. */
         console.log({
           "author": reversed[0][0].author,
           "blogs": reversed[0].length
@@ -140,6 +140,38 @@
 
       /* Call mostBlogs. */
       mostBlogs(blogs)
+
+      /* Find author with most likes. */
+      const mostLikes = (blogs) => {
+        
+        /* Group by author. */
+        const grouped = _.groupBy(blogs, "author")
+      
+        /* Map values and sum by "likes". */
+        const mapped = _.mapValues(grouped, (o) => {
+          const sumLikes = _.sumBy(o, "likes")
+          return sumLikes
+        })
+
+        /* Create an array with keys. */
+        const array = Object.keys(mapped)
+
+        /* Sort array with keys somehow.
+        I don't understand what happens here. */
+        array.sort((a, b) => mapped[b] - mapped[a])
+
+        /* Select author with most blogs by slicing array.
+        I don't understand this. */
+        const author = array.slice(0,1)
+
+        /* Correct answer. */
+        console.log("Author with most blogs:", author[0], mapped[author])
+        
+      }
+
+      /* Call mostLikes. */
+      mostLikes(blogs)
+
 
 
     </script>

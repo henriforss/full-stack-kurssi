@@ -44,7 +44,7 @@ const favoriteBlog = (blogs) => {
 }
 
 /* Find author with most blogs. */
-const mostBlogs =(blogs) => {
+const mostBlogs = (blogs) => {
 
   /* Return null if array is empty. */
   if (blogs.length === 0) {
@@ -65,7 +65,37 @@ const mostBlogs =(blogs) => {
   return correctAuthor
 }
 
+/* Find author with most likes. */
+const mostLikes = (blogs) => {
+  
+  /* Return null if array is empty. */
+  if (blogs.length === 0) {
+    return null
+  }
+
+  /* Use lodash to group and map to get an object that
+  look like { <author name>: <number of likes> }. */
+  const grouped = _.groupBy(blogs, "author")
+  const mapped = _.mapValues(grouped, (o) => {
+    const sumLikes = _.sumBy(o, "likes")
+    return sumLikes
+  })
+
+  /* Make object keys into array and sort array according to values.
+  I don't really understand what happnes here but it works. */
+  const array = Object.keys(mapped)
+  array.sort((a, b) => mapped[b] - mapped[a])
+  const author = array.slice(0,1)
+
+  /* Return author and amount of likes. */
+  return {
+    author: author[0],
+    likes: mapped[author]
+  }
+
+}
+
 /* Export functions. */
 module.exports = {
-  dummy, totalLikes, favoriteBlog, mostBlogs
+  dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes
 }
