@@ -8,12 +8,9 @@ const express = require("express")
 const blogRouter = express.Router()
 
 /* Get all blog posts. */
-blogRouter.get("/", (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
+blogRouter.get("/", async (request, response) => {
+  const blogs = await Blog.find({})
+  response.status(200).json(blogs)
 })
 
 /* Create new blog post. */
