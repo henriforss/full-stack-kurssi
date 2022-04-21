@@ -8,7 +8,7 @@ const info = (...params) => {
 
 /* Log errors */
 const error = (...params) => {
-  console.error(...params)
+  console.log(...params)
 }
 
 /* Export module. */

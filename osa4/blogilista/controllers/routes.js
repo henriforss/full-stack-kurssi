@@ -14,14 +14,21 @@ blogRouter.get("/", async (request, response) => {
 })
 
 /* Create new blog post. */
-blogRouter.post("/", (request, response) => {
+blogRouter.post("/", async (request, response, next) => {
+
+  /* Create a new mongoose Blog from request.body and 
+  save in variable. */
   const blog = new Blog(request.body)
 
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
+  /* Use variable to save blog asynchronously.
+  Then respond to original request with status code
+  and saved blog. Errors are handled by express-async-errors
+  and /utils/middleware.errorHandler. */
+  const savedBlog = await blog.save()
+  response.status(201).json(savedBlog)
+
+
+
 })
 
 /* Export module. */

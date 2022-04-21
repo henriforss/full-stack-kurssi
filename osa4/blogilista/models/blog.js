@@ -3,12 +3,13 @@
 /* Import necessary modules. */
 const mongoose = require("mongoose")
 
-/* Create Mongoose Schema. */
+/* Create Mongoose Schema. If likes is undefined,
+assign default value 0.*/
 const blogSchema = mongoose.Schema({
-  title: String,
+  title: {type: String, required: true },
   author: String,
-  url: String,
-  likes: Number
+  url: { type: String, required: true },
+  likes: { type: Number, default: 0 }
 })
 
 /* Export module. */
