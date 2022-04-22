@@ -2,14 +2,16 @@
 
 /* Import necessary modules. */
 const express = require("express")
-require("express-async-errors")
-const app = express()
 const mongoose = require("mongoose")
 const cors = require("cors")
 const config = require("./utils/config")
 const middleware = require("./utils/middleware")
 const logger = require("./utils/logger")
 const blogRouter = require("./controllers/routes")
+require("express-async-errors")
+
+/* Create express app. */
+const app = express()
 
 /* Connect to Mongo DB. */
 mongoose.connect(config.MONGODB_URL)

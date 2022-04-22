@@ -17,15 +17,12 @@ next(). Must be enabled last in app.js script. */
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message)
 
-  if (error.name == "ValidationError") {
-    return response.status(400).end() //.send(error.message)
+  if (error.name === "ValidationError") {
+    return response.status(400).end()
   }
 
   next(error)
 }
 
-
 /* Export module. */
-module.exports = {
-  requestLogger, errorHandler
-}
+module.exports = { requestLogger, errorHandler }
