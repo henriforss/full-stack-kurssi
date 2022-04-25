@@ -33,7 +33,7 @@
           "arrow-spacing": [
             "error", { "before": true, "after": true }
           ],
-          "no-console": "error",
+          "no-console": "off",
           "linebreak-style": [
             "error",
             "unix"

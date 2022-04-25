@@ -1,20 +1,20 @@
-/* Controlling routes and all that happens in routing. */
+/* Controlling /api/blogs and all that happens there. */
 
 /* Import necessary modules. */
 const express = require("express")
 const Blog = require("../models/blog")
 
 /* Create a new router object from express application. */
-const blogRouter = express.Router()
+const blogsRouter = express.Router()
 
 /* Get all blog posts. */
-blogRouter.get("/", async (request, response) => {
+blogsRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({})
   response.status(200).json(blogs)
 })
 
 /* Create new blog post. */
-blogRouter.post("/", async (request, response) => {
+blogsRouter.post("/", async (request, response) => {
   /* Create a new mongoose Blog from request.body and
   save in variable. */
   const blog = new Blog(request.body)
@@ -28,7 +28,7 @@ blogRouter.post("/", async (request, response) => {
 })
 
 /* Delete blog post. */
-blogRouter.delete("/:id", async (request, response) => {
+blogsRouter.delete("/:id", async (request, response) => {
   const { id } = request.params
 
   const deletedBlog = await Blog.findByIdAndRemove(id)
@@ -36,7 +36,7 @@ blogRouter.delete("/:id", async (request, response) => {
 })
 
 /* Modify blog post. */
-blogRouter.put("/:id", async (request, response) => {
+blogsRouter.put("/:id", async (request, response) => {
   const { id } = request.params
 
   const updatedBlog = await Blog.findByIdAndUpdate(id, { likes: 5 }, { new: true })
@@ -44,4 +44,4 @@ blogRouter.put("/:id", async (request, response) => {
 })
 
 /* Export module. */
-module.exports = blogRouter
+module.exports = blogsRouter

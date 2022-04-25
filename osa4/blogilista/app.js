@@ -2,13 +2,14 @@
 
 /* Import necessary modules. */
 const express = require("express")
+require("express-async-errors")
 const mongoose = require("mongoose")
 const cors = require("cors")
 const config = require("./utils/config")
 const middleware = require("./utils/middleware")
 const logger = require("./utils/logger")
-const blogRouter = require("./controllers/routes")
-require("express-async-errors")
+const blogsRouter = require("./controllers/blogs")
+const usersRouter = require("./controllers/users")
 
 /* Create express app. */
 const app = express()
@@ -30,7 +31,8 @@ app.use(middleware.requestLogger)
 
 /* This is the middleware that takes care of all the routing.
 Very important. */
-app.use("/api/blogs", blogRouter)
+app.use("/api/blogs", blogsRouter)
+app.use("/api/users", usersRouter)
 
 /* This middleware must be enabled last. */
 app.use(middleware.errorHandler)
