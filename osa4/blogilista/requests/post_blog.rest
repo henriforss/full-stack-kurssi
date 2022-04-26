@@ -7,3 +7,53 @@ Content-Type: application/json
   "url": "http://www.helpme.com",
   "likes": 9
 }
+
+
+
+###
+
+
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Great Visualizations",
+  "author": "Mark Visual",
+  "url": "http://www.vizualeye.com",
+  "likes": 5
+}
+
+
+
+###
+
+
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJsb2d1c2VyMiIsImlkIjoiNjI2NzgyNGVjYzI2NzcwNmI5MjFjZDcxIiwiaWF0IjoxNjUwOTYyODYyLCJleHAiOjE2NTA5NjY0NjJ9.bGM0ihPGMLQnPT7kE2AOaRur5uSpiPBtGB9fUtmUNXU
+
+{
+  "title": "Healing Through Summer",
+  "author": "Lisa Baumgartner",
+  "url": "http://www.betterlives.com",
+  "likes": 3
+}
+
+
+
+###
+
+
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: BEARER eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJsb2d1c2VyNCIsImlkIjoiNjI2N2JmMGIwNDYxNzIyZGQ0MDNjNTM5IiwiaWF0IjoxNjUwOTY2MzA3LCJleHAiOjE2NTA5Njk5MDd9.hIv-bfw8bJQfMT2Q5kw49W5oyeNQNduhzEA78U9tGhE
+
+{
+  "title": "Best Practices",
+  "author": "Mark Mahon",
+  "url": "http://www.bestpractices.com",
+  "likes": 11
+}

@@ -8,6 +8,12 @@ const userSchema = mongoose.Schema({
   username: String,
   name: String,
   passwordHash: String,
+  blogs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Blog",
+    },
+  ],
 })
 
 userSchema.set("toJSON", {
@@ -17,7 +23,7 @@ userSchema.set("toJSON", {
     delete returnedObject.__v
     /* Do not reveal password. */
     delete returnedObject.passwordHash
-  }
+  },
 })
 
 /* Export modeule. */

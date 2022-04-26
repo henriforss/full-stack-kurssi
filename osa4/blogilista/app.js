@@ -10,6 +10,7 @@ const middleware = require("./utils/middleware")
 const logger = require("./utils/logger")
 const blogsRouter = require("./controllers/blogs")
 const usersRouter = require("./controllers/users")
+const loginRouter = require("./controllers/login")
 
 /* Create express app. */
 const app = express()
@@ -33,6 +34,7 @@ app.use(middleware.requestLogger)
 Very important. */
 app.use("/api/blogs", blogsRouter)
 app.use("/api/users", usersRouter)
+app.use("/api/login", loginRouter)
 
 /* This middleware must be enabled last. */
 app.use(middleware.errorHandler)
