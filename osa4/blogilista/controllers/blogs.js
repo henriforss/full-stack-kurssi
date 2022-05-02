@@ -2,7 +2,6 @@
 
 /* Import necessary modules. */
 const express = require("express")
-const jwt = require("jsonwebtoken")
 const Blog = require("../models/blog")
 const User = require("../models/user")
 const middleware = require("../utils/middleware")
