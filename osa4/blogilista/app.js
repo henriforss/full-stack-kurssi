@@ -29,6 +29,7 @@ Otherwise it won't work. */
 app.use(cors())
 app.use(express.json())
 app.use(middleware.requestLogger)
+app.use(middleware.tokenExtractor)
 
 /* This is the middleware that takes care of all the routing.
 Very important. */

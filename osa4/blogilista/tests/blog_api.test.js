@@ -1,21 +1,89 @@
 /* Integration (?) tests for blogilista api. */
 
 /* Require necessary modules. */
-const { test, expect, afterAll, beforeEach, describe } = require("@jest/globals")
+const { test, expect, afterAll, beforeEach, describe, afterEach } = require("@jest/globals")
 const mongoose = require("mongoose")
 const supertest = require("supertest")
 const app = require("../app")
 const Blog = require("../models/blog")
+const User = require("../models/user")
 const helper = require("./test_helper")
 
 const api = supertest(app)
+
+// /* Function to create newUser, log in, and return token. */
+// const logIn = async () => {
+//   const newUser = {
+//     username: "testuser5",
+//     name: "Test User",
+//     password: "test",
+//   }
+
+//   await api
+//     .post("/api/users")
+//     .set("Content-Type", "application/json")
+//     .send(newUser)
+//     .expect(201)
+
+//   /* Login as newUser. */
+//   const user = {
+//     username: "testuser5",
+//     password: "test",
+//   }
+
+//   const result = await api
+//     .post("/api/login")
+//     .send(user)
+//     .expect(200)
+
+//   return result.body.token
+// }
+
+// /* Function to delete newUser. */
+// const logOut = async () => {
+//   const findUser = await User.findOne({ username: "testuser5" })
+//   const deletedUser = await User.findByIdAndRemove(findUser.id)
+// }
 
 /* Define beforeEach for each test.
 Delete all entries and insert test-entries. */
 beforeEach(async () => {
   await Blog.deleteMany({})
   await Blog.insertMany(helper.initialBlogs)
+  await User.deleteMany({})
 })
+
+// /* Test no.0. */
+// test.only("log in is successful", async () => {
+//   /* Create newUser. Existing users do not have passwordHash. */
+//   const newUser = {
+//     username: "testuser5",
+//     name: "Test User",
+//     password: "test",
+//   }
+
+//   await api
+//     .post("/api/users")
+//     .set("Content-Type", "application/json")
+//     .send(newUser)
+//     .expect(201)
+
+//   /* Login as newUser. */
+//   const user = {
+//     username: "testuser5",
+//     password: "test",
+//   }
+
+//   const result = await api
+//     .post("/api/login")
+//     .send(user)
+//     .expect(200)
+
+//   console.log(result.body.token)
+
+//   const findUser = await User.findOne({ username: "testuser5" })
+//   const deletedUser = await User.findByIdAndRemove(findUser.id)
+// })
 
 /* Test no.1. */
 test("make sure GET returns all entries", async () => {
@@ -47,8 +115,41 @@ test("every entry has an id", async () => {
   })
 })
 
+
+
+
+
+
 /* Test no.4. */
-test("make sure POST requests are succesful", async () => {
+test.only("make sure POST requests are succesful", async () => {
+  /* Create newUser and save in databse. */
+  const newUser = {
+    username: "testuser5",
+    name: "Test User",
+    password: "test",
+  }
+
+  await api
+    .post("/api/users")
+    .set("Content-Type", "application/json")
+    .send(newUser)
+    .expect(201)
+
+  /* Log in to get token. */
+  const user = {
+    username: "testuser5",
+    password: "test",
+  }
+
+  const result = await api
+    .post("/api/login")
+    .send(user)
+
+  let { token } = result.body
+  token = `Bearer ${token}`
+
+  console.log(token)
+
   /* Create a new blog for testing. */
   const newBlog = {
     title: "Posting Blogs",
@@ -61,6 +162,7 @@ test("make sure POST requests are succesful", async () => {
   expect an answer, and expect a content-type. */
   await api
     .post("/api/blogs")
+    .set("Authorization", token)
     .send(newBlog)
     .expect(201)
     .expect("Content-Type", /application\/json/)
@@ -74,6 +176,12 @@ test("make sure POST requests are succesful", async () => {
   const titles = blogsAtEnd.map((blog) => blog.title)
   expect(titles).toContain(newBlog.title)
 })
+
+
+
+
+
+
 
 /* Test no.5. */
 test("POST-requests with likes value undefined get likes value zero", async () => {

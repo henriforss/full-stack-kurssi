@@ -5,6 +5,7 @@ const express = require("express")
 const jwt = require("jsonwebtoken")
 const Blog = require("../models/blog")
 const User = require("../models/user")
+const middleware = require("../utils/middleware")
 
 /* Create a new router object from express application. */
 const blogsRouter = express.Router()
@@ -17,36 +18,21 @@ blogsRouter.get("/", async (request, response) => {
   response.status(200).json(blogs)
 })
 
-/* Function to get token. Used in POST-requests below. */
-const getTokenFrom = (request) => {
-  /* Get key "authorization" from request header. */
-  const authorization = request.get("authorization")
-
-  /* If both conditions are true, return token. */
-  if (authorization && authorization.toLowerCase().startsWith("bearer")) {
-    const token = authorization.split(" ")
-    return token[1]
-  }
-  /* If either condition is false, return null. */
-  return null
-}
-
 /* Create new blog post. */
-blogsRouter.post("/", async (request, response) => {
+blogsRouter.post("/", middleware.userExtractor, async (request, response) => {
   /* Destructure request.body. */
   const { title, author, url, likes } = request.body
 
-  /* Use function to get token from header. */
-  const token = getTokenFrom(request)
-  const verifiedToken = jwt.verify(token, process.env.SECRET_KEY)
+  /* Get userId (verifiedToken.id from middleware). */
+  const { userId } = request
 
-  /* If token or verifiedToken is missing, return error. */
-  if (!token && !verifiedToken) {
+  /* If no userId, return error. */
+  if (!userId) {
     return response.status(401).json({ error: "Missing or invalid token." })
   }
 
-  /* Find user with help of verifiedToken.id. */
-  const user = await User.findById(verifiedToken.id)
+  /* Find user with help of userId. */
+  const user = await User.findById(userId)
 
   /* Create new Blog item. */
   const blog = new Blog({
@@ -68,11 +54,23 @@ blogsRouter.post("/", async (request, response) => {
 })
 
 /* Delete blog post. */
-blogsRouter.delete("/:id", async (request, response) => {
+blogsRouter.delete("/:id", middleware.userExtractor, async (request, response) => {
   const { id } = request.params
 
-  const deletedBlog = await Blog.findByIdAndRemove(id)
-  response.status(204).json(deletedBlog)
+  /* Get userId (verifiedToken.id from middleware). */
+  const { userId } = request
+
+  /* Get blog from database and user from blog. */
+  const blog = await Blog.findById(id)
+  const { user } = blog
+
+  /* Compare userId with user.id, and delete */
+  if (user.toString() === userId) {
+    const deletedBlog = await Blog.findByIdAndRemove(id)
+    response.status(200).json(deletedBlog)
+  } else {
+    return response.status(400).json({ error: "Invalid user." })
+  }
 })
 
 /* Modify blog post. */

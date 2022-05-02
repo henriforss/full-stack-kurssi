@@ -1,6 +1,7 @@
 /* Customized middleware.  */
 
 /* Import necessary modules. */
+const jwt = require("jsonwebtoken")
 const logger = require("./logger")
 
 /* Middleware requestLogger for logging all requests, responses. */
@@ -8,6 +9,35 @@ const requestLogger = (req, res, next) => {
   logger.info("Method:", req.method)
   logger.info("Path:", req.path)
   logger.info("Body:", req.body)
+  next()
+}
+
+/* Middleware to get token from request. */
+const tokenExtractor = (req, res, next) => {
+  /* Get key "authorization" from request header. */
+  const authorization = req.get("authorization")
+
+  /* If both conditions are true, add token to request. */
+  if (authorization && authorization.toLowerCase().startsWith("bearer")) {
+    const [bearer, token] = authorization.split(" ")
+    req.token = token
+  }
+
+  next()
+}
+
+/* Middleware to get user from request.
+Note: This must be enabled AFTER tokenExtractor. */
+const userExtractor = (req, res, next) => {
+  /* Get token from request, and verify. verifiedToken contains
+  username and id. */
+  const { token } = req
+  const verifiedToken = jwt.verify(token, process.env.SECRET_KEY)
+
+  if (verifiedToken) {
+    req.userId = verifiedToken.id
+  }
+
   next()
 }
 
@@ -29,4 +59,9 @@ const errorHandler = (error, request, response, next) => {
 }
 
 /* Export module. */
-module.exports = { requestLogger, errorHandler }
+module.exports = {
+  requestLogger,
+  errorHandler,
+  tokenExtractor,
+  userExtractor,
+}
