@@ -44,10 +44,17 @@ blogsRouter.post("/", middleware.userExtractor, async (request, response) => {
 
   /* Save blog in db. */
   const savedBlog = await blog.save()
+  console.log(savedBlog)
 
-  /* Save reference to blog in user.blogs. */
-  user.blogs = user.blogs.concat(savedBlog)
-  await user.save()
+  console.log("moikka1")
+
+  /* Save reference to blog in user.blogs. Note: Need to find user
+  in database again, otherwise it will not work. */
+  const user2 = await User.findById(userId)
+  user2.blogs = user2.blogs.concat(savedBlog)
+  await user2.save()
+
+  console.log("moikka2")
 
   return response.status(201).json(savedBlog)
 })
@@ -66,10 +73,10 @@ blogsRouter.delete("/:id", middleware.userExtractor, async (request, response) =
   /* Compare userId with user.id, and delete */
   if (user.toString() === userId) {
     const deletedBlog = await Blog.findByIdAndRemove(id)
-    response.status(200).json(deletedBlog)
-  } else {
-    return response.status(400).json({ error: "Invalid user." })
+    return response.status(200).json(deletedBlog)
   }
+
+  return response.status(400).json({ error: "Invalid user." })
 })
 
 /* Modify blog post. */

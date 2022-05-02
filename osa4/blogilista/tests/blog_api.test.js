@@ -49,8 +49,66 @@ test("every entry has an id", async () => {
   })
 })
 
-/* Test no.4. Note: This does not work. Probably an issue with Jest. */
-test.only("make sure POST requests are succesful", async () => {
+/* Test no.4. */
+test("make sure POST requests are succesful", async () => {
+  /* Create newUser and save in databse. */
+  const newUser = {
+    username: "testuser5",
+    name: "Test User",
+    password: "test",
+  }
+
+  await api
+    .post("/api/users")
+    .set("Content-Type", "application/json")
+    .send(newUser)
+    .expect(201)
+
+  /* Log in to get token. */
+  const user = {
+    username: "testuser5",
+    password: "test",
+  }
+
+  const result = await api
+    .post("/api/login")
+    .send(user)
+
+  let { token } = result.body
+  token = `Bearer ${token}`
+  console.log(token)
+
+  /* Create a new blog for testing. */
+  const newBlog = {
+    title: "Posting Blogs",
+    url: "http://http-posting-for-dummies.com/",
+    author: "Peter Postman",
+    likes: 8,
+  }
+
+  /* Use supertest to do POST-request, send blog post,
+  expect an answer, and expect a content-type. */
+  const result2 = await api
+    .post("/api/blogs")
+    .set("Authorization", token)
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/)
+
+  console.log(result2.text)
+
+  /* Check that number of blogs in database increases by one. */
+  const blogsAtStart = helper.initialBlogs
+  const blogsAtEnd = await Blog.find({})
+  expect(blogsAtEnd.length).toBe(blogsAtStart.length + 1)
+
+  /* Check that new blog is in database. */
+  const titles = blogsAtEnd.map((blog) => blog.title)
+  expect(titles).toContain(newBlog.title)
+})
+
+/* Test no.5. */
+test("POST-requests with likes value undefined get likes value zero", async () => {
   /* Create newUser and save in databse. */
   const newUser = {
     username: "testuser5",
@@ -79,37 +137,6 @@ test.only("make sure POST requests are succesful", async () => {
 
   console.log(token)
 
-  /* Create a new blog for testing. */
-  const newBlog = {
-    title: "Posting Blogs",
-    url: "http://http-posting-for-dummies.com/",
-    author: "Peter Postman",
-    likes: 8,
-  }
-
-  /* Use supertest to do POST-request, send blog post,
-  expect an answer, and expect a content-type. */
-  const result2 = await api
-    .post("/api/blogs")
-    .send(newBlog)
-    .set("Authorization", token)
-    .expect(201)
-    .expect("Content-Type", /application\/json/)
-
-  console.log(result2)
-
-  /* Check that number of blogs in database increases by one. */
-  const blogsAtStart = helper.initialBlogs
-  const blogsAtEnd = await Blog.find({})
-  expect(blogsAtEnd.length).toBe(blogsAtStart.length + 1)
-
-  /* Check that new blog is in database. */
-  const titles = blogsAtEnd.map((blog) => blog.title)
-  expect(titles).toContain(newBlog.title)
-})
-
-/* Test no.5. */
-test("POST-requests with likes value undefined get likes value zero", async () => {
   /* Create a new blog with likes undefined. */
   const newBlog = {
     title: "Nobody likes this blog",
@@ -120,6 +147,7 @@ test("POST-requests with likes value undefined get likes value zero", async () =
   /* Post newBlog to server and expect status 201, "created". */
   await api
     .post("/api/blogs")
+    .set("Authorization", token)
     .send(newBlog)
     .expect(201)
 
@@ -133,6 +161,34 @@ test("POST-requests with likes value undefined get likes value zero", async () =
 describe("server returns 400", () => {
   /* Test no.6.1. */
   test("when POST-requests lacks key 'url'", async () => {
+    /* Create newUser and save in databse. */
+    const newUser = {
+      username: "testuser5",
+      name: "Test User",
+      password: "test",
+    }
+
+    await api
+      .post("/api/users")
+      .set("Content-Type", "application/json")
+      .send(newUser)
+      .expect(201)
+
+    /* Log in to get token. */
+    const user = {
+      username: "testuser5",
+      password: "test",
+    }
+
+    const result = await api
+      .post("/api/login")
+      .send(user)
+
+    let { token } = result.body
+    token = `Bearer ${token}`
+
+    console.log(token)
+
     /* Create new blog with no url. */
     const noUrl = {
       title: "This one has no url",
@@ -143,6 +199,7 @@ describe("server returns 400", () => {
     /* POST-request, send new blog, and expect status 400, "bad request". */
     await api
       .post("/api/blogs")
+      .set("Authorization", token)
       .send(noUrl)
       .expect(400)
 
@@ -155,6 +212,34 @@ describe("server returns 400", () => {
 
   /* Test no.6.2. */
   test("when POST-request lacks key 'title'", async () => {
+    /* Create newUser and save in databse. */
+    const newUser = {
+      username: "testuser5",
+      name: "Test User",
+      password: "test",
+    }
+
+    await api
+      .post("/api/users")
+      .set("Content-Type", "application/json")
+      .send(newUser)
+      .expect(201)
+
+    /* Log in to get token. */
+    const user = {
+      username: "testuser5",
+      password: "test",
+    }
+
+    const result = await api
+      .post("/api/login")
+      .send(user)
+
+    let { token } = result.body
+    token = `Bearer ${token}`
+
+    console.log(token)
+
     const noTitle = {
       author: "No Title",
       url: "http://www.notitleonthisone.com/",
@@ -163,6 +248,7 @@ describe("server returns 400", () => {
 
     await api
       .post("/api/blogs")
+      .set("Authorization", token)
       .send(noTitle)
       .expect(400)
 
@@ -173,6 +259,34 @@ describe("server returns 400", () => {
 
   /* Test no.6.3. */
   test("when POST-request lacks both 'url' and 'title'", async () => {
+    /* Create newUser and save in databse. */
+    const newUser = {
+      username: "testuser5",
+      name: "Test User",
+      password: "test",
+    }
+
+    await api
+      .post("/api/users")
+      .set("Content-Type", "application/json")
+      .send(newUser)
+      .expect(201)
+
+    /* Log in to get token. */
+    const user = {
+      username: "testuser5",
+      password: "test",
+    }
+
+    const result = await api
+      .post("/api/login")
+      .send(user)
+
+    let { token } = result.body
+    token = `Bearer ${token}`
+
+    console.log(token)
+
     const noTitleOrUrl = {
       author: "No Nothing",
       likes: 2,
@@ -181,6 +295,7 @@ describe("server returns 400", () => {
     await api
       .post("/api/blogs")
       .send(noTitleOrUrl)
+      .set("Authorization", token)
       .expect(400)
 
     const blogsAtStart = helper.initialBlogs
@@ -193,6 +308,34 @@ describe("server returns 400", () => {
 describe("a single blog", () => {
   /* Test no.7.1. */
   test("can be deleted", async () => {
+    /* Create newUser and save in databse. */
+    const newUser = {
+      username: "testuser5",
+      name: "Test User",
+      password: "test",
+    }
+
+    await api
+      .post("/api/users")
+      .set("Content-Type", "application/json")
+      .send(newUser)
+      .expect(201)
+
+    /* Log in to get token. */
+    const user = {
+      username: "testuser5",
+      password: "test",
+    }
+
+    const result = await api
+      .post("/api/login")
+      .send(user)
+
+    let { token } = result.body
+    token = `Bearer ${token}`
+
+    console.log(token)
+
     /* Create a new blog to be deleted later. */
     const newBlog = {
       title: "How to delete blogs",
@@ -204,6 +347,7 @@ describe("a single blog", () => {
     /* Make POST-request and send newBlog, expect status code 201. */
     await api
       .post("/api/blogs")
+      .set("Authorization", token)
       .send(newBlog)
       .expect(201)
 
@@ -212,9 +356,12 @@ describe("a single blog", () => {
     const blogToDeleteId = blogToDelete[0].id
 
     /* Delete newBlog with blog id. */
-    await api
+    const result2 = await api
       .delete(`/api/blogs/${blogToDeleteId}`)
-      .expect(204)
+      .set("Authorization", token)
+      .expect(200)
+
+    console.log(result2.body)
 
     /* Make sure newBlog is no longer in database. */
     const deletedBlog = Blog.findById(blogToDeleteId)
@@ -223,6 +370,34 @@ describe("a single blog", () => {
 
   /* Test no.7.2. */
   test("can be modified", async () => {
+    /* Create newUser and save in databse. */
+    const newUser = {
+      username: "testuser5",
+      name: "Test User",
+      password: "test",
+    }
+
+    await api
+      .post("/api/users")
+      .set("Content-Type", "application/json")
+      .send(newUser)
+      .expect(201)
+
+    /* Log in to get token. */
+    const user = {
+      username: "testuser5",
+      password: "test",
+    }
+
+    const result = await api
+      .post("/api/login")
+      .send(user)
+
+    let { token } = result.body
+    token = `Bearer ${token}`
+
+    console.log(token)
+
     /* Create a new blog to be modified later. */
     const newBlog = {
       title: "How to modify blogs",
@@ -235,6 +410,7 @@ describe("a single blog", () => {
     await api
       .post("/api/blogs")
       .send(newBlog)
+      .set("Authorization", token)
       .expect(201)
 
     /* Find newBlog id in database. */

@@ -19,8 +19,9 @@ const tokenExtractor = (req, res, next) => {
 
   /* If both conditions are true, add token to request. */
   if (authorization && authorization.toLowerCase().startsWith("bearer")) {
-    const [bearer, token] = authorization.split(" ")
+    const token = authorization.split(" ")[1]
     req.token = token
+    console.log("heippa")
   }
 
   next()
@@ -36,6 +37,7 @@ const userExtractor = (req, res, next) => {
 
   if (verifiedToken) {
     req.userId = verifiedToken.id
+    console.log("jippii")
   }
 
   next()
@@ -45,7 +47,7 @@ const userExtractor = (req, res, next) => {
 express-async-errors imported in app.js. Can also use express-function
 next(). Must be enabled last in app.js script. */
 const errorHandler = (error, request, response, next) => {
-  logger.error(error.message)
+  logger.error(error)
 
   if (error.name === "ValidationError") {
     return response.status(400).end()
