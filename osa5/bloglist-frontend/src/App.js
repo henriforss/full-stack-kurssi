@@ -17,7 +17,17 @@ const App = () => {
     )  
   }, [])
 
-  /* Handle login. */
+  /* Check if there is a user in window.localStorage. */
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser")
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+    }
+  }, [])
+
+
+  /* Handle log in. */
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -26,12 +36,21 @@ const App = () => {
         username,
         password,
       })
+      window.localStorage.setItem(
+        "loggedBlogappUser", JSON.stringify(user)
+      )
       setUser(user)
       setUsername("")
       setPassword("")
     } catch (exception) {
       console.log("ERROR: Wrong credentials.")
     }
+  }
+
+  /* Handle log out. */
+  const handleLogout = () => {
+    window.localStorage.removeItem("loggedBlogappUser")
+    setUser(null)
   }
 
   /* Function for generating loginForm. Note: Why is this
@@ -56,7 +75,7 @@ const App = () => {
           onChange={({ target }) => setPassword(target.value)}
           />
       </div>
-      <button type="submit">Login</button>
+      <button type="submit">Log in</button>
     </form>
   )
 
@@ -74,13 +93,16 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <p>
+      <div>
         {user.name} logged in
-      </p>
-
-      {blogs.map(blog =>
-        <Blog key={blog._id} blog={blog} />
-      )}
+        <button onClick={handleLogout}>Log out</button>
+      </div>
+      <br/>
+      <div>
+        {blogs.map(blog =>
+          <Blog key={blog._id} blog={blog} />
+        )}
+      </div>
     </div>
   )
 }
