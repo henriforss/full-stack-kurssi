@@ -31,6 +31,8 @@ app.use(express.json())
 app.use(middleware.requestLogger)
 app.use(middleware.tokenExtractor)
 
+// app.use("/api/blogs", middleware.userExtractor)
+
 /* This is the middleware that takes care of all the routing.
 Very important. */
 app.use("/api/blogs", blogsRouter)
