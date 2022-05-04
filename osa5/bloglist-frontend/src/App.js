@@ -1,14 +1,23 @@
-import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
-import blogService from './services/blogs'
+/* Import necessary libraries/modules. */
+import { useState, useEffect } from "react"
+import { LoginForm, LoginStatus, CreateNewForm, Notification } from "./components/functions"
+import Blog from "./components/Blog"
+import blogService from "./services/blogs"
 import loginService from "./services/login"
 
+/* The app itself. */
 const App = () => {
+
   /* Define variables. */
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
+  const [title, setTitle] = useState("")
+  const [author, setAuthor] = useState("")
+  const [url, setUrl] = useState("")
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notificationStyle, setNotificationStyle] = useState(null)
 
   /* Get initial blogs with useEffect. */
   useEffect(() => {
@@ -26,11 +35,9 @@ const App = () => {
     }
   }, [])
 
-
   /* Handle log in. */
   const handleLogin = async (event) => {
     event.preventDefault()
-
     try {
       const user = await loginService.login({
         username,
@@ -43,7 +50,9 @@ const App = () => {
       setUsername("")
       setPassword("")
     } catch (exception) {
-      console.log("ERROR: Wrong credentials.")
+      setNotificationStyle("error")
+      setNotificationMessage("Error: Wrong username or password.")
+      setTimeout(() => setNotificationMessage(null), 5000)
     }
   }
 
@@ -53,38 +62,41 @@ const App = () => {
     setUser(null)
   }
 
-  /* Function for generating loginForm. Note: Why is this
-  arrowfunction using () instead of {}? */
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username 
-          <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-          />
-      </div>
-      <div>
-        password
-          <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-          />
-      </div>
-      <button type="submit">Log in</button>
-    </form>
-  )
+  /* Handle create new blog. */
+  const handleCreateNew = async (event) => {
+    event.preventDefault()
+    try {
+      const newBlog = await blogService.createNew({ user, title, author, url })
+      setBlogs(blogs.concat(newBlog))
+      setNotificationStyle("success")
+      setNotificationMessage(`Blog added: ${newBlog.title}, ${newBlog.author}`)
+      setTimeout(() => setNotificationMessage(null), 5000)
+    } catch (exception) {
+      setNotificationStyle("error")
+      setNotificationMessage(`Error: ${exception.message}`)
+      setTimeout(() => setNotificationMessage(null), 5000)
+    }
+    setTitle("")
+    setAuthor("")
+    setUrl("")
+  }
 
   /* If user is not logged in. */
   if (user === null) {
     return (
       <div>
+        <Notification
+          notificationMessage={notificationMessage}
+          notificationStyle={notificationStyle}
+        />
         <h2>Log in to application</h2>
-        {loginForm()}
+        <LoginForm
+          handleLogin={handleLogin}
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+        />
       </div>
     )
   }
@@ -92,10 +104,28 @@ const App = () => {
   /* If user is logged in. */
   return (
     <div>
-      <h2>blogs</h2>
+      <Notification
+        notificationMessage={notificationMessage}
+        notificationStyle={notificationStyle}
+      />
+      <h2>Blogs</h2>
       <div>
-        {user.name} logged in
-        <button onClick={handleLogout}>Log out</button>
+        <LoginStatus
+          handleLogout = {handleLogout}
+          user = {user}
+        />
+      </div>
+      <div>
+        <h2>Create new</h2>
+        <CreateNewForm
+          handleCreateNew={handleCreateNew}
+          title={title}
+          setTitle={setTitle}
+          author={author}
+          setAuthor={setAuthor}
+          url={url}
+          setUrl={setUrl}
+        />
       </div>
       <br/>
       <div>
