@@ -1,9 +1,14 @@
 /* Import necessary libraries/modules. */
-import { useState, useEffect } from "react"
-import { LoginForm, LoginStatus, CreateNewForm, Notification } from "./components/functions"
-import Blog from "./components/Blog"
-import blogService from "./services/blogs"
+import { useState, useEffect, useRef } from "react"
 import loginService from "./services/login"
+import blogService from "./services/blogs"
+import Blog from "./components/Blog"
+import CreateNewForm from "./components/CreateNewForm"
+import Notification from "./components/Notification"
+import LoginForm from "./components/LoginForm"
+import LoginStatus from "./components/LoginStatus"
+import Togglable from "./components/Togglable"
+
 
 /* The app itself. */
 const App = () => {
@@ -79,7 +84,12 @@ const App = () => {
     setTitle("")
     setAuthor("")
     setUrl("")
+    createNewFormRef.current.toggleVisibility()
   }
+
+  /* Use useRef to get toggleVisibility
+  from "./components/CreateNewForm.js. */
+  const createNewFormRef = useRef()
 
   /* If user is not logged in. */
   if (user === null) {
@@ -116,16 +126,18 @@ const App = () => {
         />
       </div>
       <div>
-        <h2>Create new</h2>
-        <CreateNewForm
-          handleCreateNew={handleCreateNew}
-          title={title}
-          setTitle={setTitle}
-          author={author}
-          setAuthor={setAuthor}
-          url={url}
-          setUrl={setUrl}
-        />
+        <Togglable buttonlabel="Create new blog" ref={createNewFormRef}>
+          <h2>Create new</h2>
+          <CreateNewForm
+            handleCreateNew={handleCreateNew}
+            title={title}
+            setTitle={setTitle}
+            author={author}
+            setAuthor={setAuthor}
+            url={url}
+            setUrl={setUrl}
+          />
+        </Togglable>
       </div>
       <br/>
       <div>
