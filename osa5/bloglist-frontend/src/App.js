@@ -18,9 +18,6 @@ const App = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setUrl] = useState("")
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [notificationStyle, setNotificationStyle] = useState(null)
 
@@ -67,11 +64,17 @@ const App = () => {
     setUser(null)
   }
 
-  /* Handle create new blog. */
-  const handleCreateNew = async (event) => {
-    event.preventDefault()
+  /* Function handleCreateNew, that is passed to CreateNewForm. The blogObject
+  is created by CreateNewform in "./components/CreateNewForm.js".
+  handleCreateNew makes sure the blogObject is sent to the server with
+  blogservice.createNew. This function is called by CreateNewForm, not by App.
+  The reason it is here is that it uses some of the variables here, ie.
+  "blogs/setBlogs", "notificationStyle/setNotificationStyle",
+  "notificationMessage/setNotificationMessage". Also it uses referred function
+  "toggleVisibility". More specific variables have been moved to CreateNewForm. */
+  const handleCreateNew = async (blogObject) => {
     try {
-      const newBlog = await blogService.createNew({ user, title, author, url })
+      const newBlog = await blogService.createNew(blogObject)
       setBlogs(blogs.concat(newBlog))
       setNotificationStyle("success")
       setNotificationMessage(`Blog added: ${newBlog.title}, ${newBlog.author}`)
@@ -81,9 +84,6 @@ const App = () => {
       setNotificationMessage(`Error: ${exception.message}`)
       setTimeout(() => setNotificationMessage(null), 5000)
     }
-    setTitle("")
-    setAuthor("")
-    setUrl("")
     createNewFormRef.current.toggleVisibility()
   }
 
@@ -121,8 +121,8 @@ const App = () => {
       <h2>Blogs</h2>
       <div>
         <LoginStatus
-          handleLogout = {handleLogout}
-          user = {user}
+          handleLogout={handleLogout}
+          user={user}
         />
       </div>
       <div>
@@ -130,12 +130,7 @@ const App = () => {
           <h2>Create new</h2>
           <CreateNewForm
             handleCreateNew={handleCreateNew}
-            title={title}
-            setTitle={setTitle}
-            author={author}
-            setAuthor={setAuthor}
-            url={url}
-            setUrl={setUrl}
+            user={user} 
           />
         </Togglable>
       </div>

@@ -25,4 +25,7 @@ const createNew = async (props) => {
   return response.data
 }
 
+/* Update likes. */
+
+
 export default { getAll, createNew }
