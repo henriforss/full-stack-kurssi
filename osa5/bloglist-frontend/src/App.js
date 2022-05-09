@@ -23,9 +23,12 @@ const App = () => {
 
   /* Get initial blogs with useEffect. */
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    const fetchData = async () => {
+      const blogs = await blogService.getAll()
+      sortBlogs(blogs)
+      setBlogs(blogs)      
+    }
+    fetchData()
   }, [])
 
   /* Check if there is a user in window.localStorage. */
@@ -36,6 +39,16 @@ const App = () => {
       setUser(user)
     }
   }, [])
+
+  /* Function to sort blogs. "Props" is a list of blogs. This function is
+  used when fetchData is called. Also it should be called when adding likes, 
+  in case adding likes changes the order, but at the moment that does not work. */
+  const sortBlogs = (props) => {
+    props.sort((a, b) => {
+      return b.likes - a.likes
+    })
+    setBlogs(props)
+  }
 
   /* Handle log in. */
   const handleLogin = async (event) => {
@@ -137,7 +150,13 @@ const App = () => {
       <br/>
       <div>
         {blogs.map(blog =>
-          <Blog key={blog._id} blog={blog} />
+          <Blog
+            key={blog._id}
+            blog={blog}
+            user={user}
+            setBlogs={setBlogs}
+            sortBlogs={sortBlogs}
+            />
         )}
       </div>
     </div>

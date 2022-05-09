@@ -21,7 +21,6 @@ const tokenExtractor = (req, res, next) => {
   if (authorization && authorization.toLowerCase().startsWith("bearer")) {
     const token = authorization.split(" ")[1]
     req.token = token
-    console.log("heippa")
   }
 
   next()
@@ -37,7 +36,6 @@ const userExtractor = (req, res, next) => {
 
   if (verifiedToken) {
     req.userId = verifiedToken.id
-    console.log("jippii")
   }
 
   next()
