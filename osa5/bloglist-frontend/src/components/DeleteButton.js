@@ -1,3 +1,4 @@
+/* Import necessary modules. */
 import blogService from "../services/blogs"
 
 /* Component to delete blog post if owner of blog post is user. */

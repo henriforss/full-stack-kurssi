@@ -155,7 +155,6 @@ const App = () => {
             blog={blog}
             user={user}
             setBlogs={setBlogs}
-            sortBlogs={sortBlogs}
             />
         )}
       </div>
