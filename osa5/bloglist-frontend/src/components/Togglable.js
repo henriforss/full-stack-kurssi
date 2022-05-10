@@ -5,7 +5,7 @@ const Togglable = forwardRef((props, ref) => {
   const [createNewVisible, setCreateNewVisible] = useState(false)
 
   const showWhenVisible = { display: createNewVisible ? "" : "none" }
-  const hideWhenVisible = { display: createNewVisible ? "none" : ""}
+  const hideWhenVisible = { display: createNewVisible ? "none" : "" }
 
   const toggleVisibility = () => {
     setCreateNewVisible(!createNewVisible)
@@ -29,5 +29,7 @@ const Togglable = forwardRef((props, ref) => {
     </div>
   )
 })
+
+Togglable.displayName = "Togglable"
 
 export default Togglable
