@@ -70,8 +70,10 @@ test("blog.url and blog.likes are rendered after button click", async () => {
 })
 
 /* Test no.3. Note: This test does not work because the eventhandler for the
-like button is not passed as a prop, but defined in the component. */
-test("press 'like' button twice calls eventhandler twice", async () => {
+like button is not passed as a prop, but defined in the component. Also, the
+alternative version of the test presented here does not work either, because
+"Likes" are not updated on click. */
+test.only("press 'like' button twice calls eventhandler twice", async () => {
   /* Define test blog. */
   const testblog = {
     title: "Blog Title",
