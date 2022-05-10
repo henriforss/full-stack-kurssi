@@ -1,5 +1,6 @@
 /* Import necessary modules. */
 import { useState } from "react"
+import PropTypes from "prop-types"
 import blogService from "../services/blogs"
 import DeleteButton from "./DeleteButton"
 
@@ -22,7 +23,7 @@ const Blog = ({ blog, user, setBlogs }) => {
     "padding": "5px",
     "color": "Black",
   }
-  
+
   const nodetails = {
     "border": "2px",
     "borderStyle": "solid",
@@ -47,7 +48,7 @@ const Blog = ({ blog, user, setBlogs }) => {
           {blog.title} by {blog.author}
           <button onClick={toggleDetails}>Show</button>
         </div>
-      </div>        
+      </div>
     )
   } else {
     return (
@@ -71,11 +72,18 @@ const Blog = ({ blog, user, setBlogs }) => {
             blog={blog}
             user={user}
             setBlogs={setBlogs}
-            />
+          />
         </div>
-      </div>  
+      </div>
     )
   }
+}
+
+/* Define propTypes. */
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  setBlogs: PropTypes.func.isRequired,
 }
 
 export default Blog

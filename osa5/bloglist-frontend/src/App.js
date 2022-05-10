@@ -26,7 +26,7 @@ const App = () => {
     const fetchData = async () => {
       const blogs = await blogService.getAll()
       sortBlogs(blogs)
-      setBlogs(blogs)      
+      setBlogs(blogs)
     }
     fetchData()
   }, [])
@@ -41,7 +41,7 @@ const App = () => {
   }, [])
 
   /* Function to sort blogs. "Props" is a list of blogs. This function is
-  used when fetchData is called. Also it should be called when adding likes, 
+  used when fetchData is called. Also it should be called when adding likes,
   in case adding likes changes the order, but at the moment that does not work. */
   const sortBlogs = (props) => {
     props.sort((a, b) => {
@@ -143,7 +143,7 @@ const App = () => {
           <h2>Create new</h2>
           <CreateNewForm
             handleCreateNew={handleCreateNew}
-            user={user} 
+            user={user}
           />
         </Togglable>
       </div>
@@ -155,7 +155,7 @@ const App = () => {
             blog={blog}
             user={user}
             setBlogs={setBlogs}
-            />
+          />
         )}
       </div>
     </div>

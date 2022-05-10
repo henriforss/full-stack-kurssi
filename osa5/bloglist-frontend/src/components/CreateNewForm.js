@@ -29,30 +29,30 @@ const CreateNewForm = (props) => {
       <form onSubmit={createBlogObject}>
         <div>
           Title:
-            <input
+          <input
             text="text"
             value={title}
             name="title"
             onChange={event => setTitle(event.target.value)}
-            />
+          />
         </div>
         <div>
           Author:
-            <input
+          <input
             text="text"
             value={author}
             name="author"
             onChange={event => setAuthor(event.target.value)}
-            />
+          />
         </div>
         <div>
           URL:
-            <input
+          <input
             text="text"
             value={url}
             name="url"
             onChange={event => setUrl(event.target.value)}
-            />
+          />
         </div>
         <button type="submit">Create</button>
       </form>

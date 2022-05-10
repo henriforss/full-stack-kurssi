@@ -1,5 +1,6 @@
-import axios from 'axios'
-const baseUrl = '/api/blogs'
+/* Import necessary modules. */
+import axios from "axios"
+const baseUrl = "/api/blogs"
 
 /* Get all blog. Note: this action requires
 the user to be logged in, but the user's token is

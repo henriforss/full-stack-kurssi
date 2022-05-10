@@ -1,30 +1,47 @@
+/* Import necessary modules. */
+import PropTypes from "prop-types"
+
 /* Render form for log in. */
-const LoginForm = (props) => {
+const LoginForm = ({
+  handleLogin,
+  setUsername,
+  setPassword,
+  username,
+  password }) => {
   return (
     <div>
-      <form onSubmit={props.handleLogin}>
-      <div>
-        username 
+      <form onSubmit={handleLogin}>
+        <div>
+        username
           <input
-          type="text"
-          value={props.username}
-          name="Username"
-          onChange={event => props.setUsername(event.target.value)}
+            type="text"
+            value={username}
+            name="Username"
+            onChange={event => setUsername(event.target.value)}
           />
-      </div>
-      <div>
+        </div>
+        <div>
         password
           <input
-          type="password"
-          value={props.password}
-          name="Password"
-          onChange={event => props.setPassword(event.target.value)}
+            type="password"
+            value={password}
+            name="Password"
+            onChange={event => setPassword(event.target.value)}
           />
-      </div>
-      <button type="submit">Log in</button>
-    </form>
+        </div>
+        <button type="submit">Log in</button>
+      </form>
     </div>
   )
+}
+
+/* Define propTypes. */
+LoginForm.propTypes = {
+  handleLogin: PropTypes.func.isRequired,
+  setUsername: PropTypes.func.isRequired,
+  setPassword: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired,
 }
 
 export default LoginForm
