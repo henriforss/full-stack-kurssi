@@ -10,7 +10,7 @@
 }
 
 .error {
-  color: red;
+  color: rgb(255, 0, 0);
   background: lightgrey;
   border: 3px;
   border-style: solid;

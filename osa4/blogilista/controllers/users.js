@@ -18,7 +18,7 @@ usersRouter.post("/", async (request, response) => {
 
   /* Make sure there is a username and a password. */
   if (!(username && password)) {
-    return response.status(400).json({ error: "Missing username of password." })
+    return response.status(400).json({ error: "Missing username or password." })
   }
 
   /* Search for username. If username is taken, respond vid error. */

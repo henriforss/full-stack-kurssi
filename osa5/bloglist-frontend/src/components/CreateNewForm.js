@@ -30,6 +30,7 @@ const CreateNewForm = (props) => {
         <div>
           Title:
           <input
+            id="title"
             text="text"
             value={title}
             name="title"
@@ -39,6 +40,7 @@ const CreateNewForm = (props) => {
         <div>
           Author:
           <input
+            id="author"
             text="text"
             value={author}
             name="author"
@@ -48,13 +50,16 @@ const CreateNewForm = (props) => {
         <div>
           URL:
           <input
+            id="url"
             text="text"
             value={url}
             name="url"
             onChange={event => setUrl(event.target.value)}
           />
         </div>
-        <button type="submit">Create</button>
+        <button
+          id="create-button"
+          type="submit">Create</button>
       </form>
     </div>
   )
