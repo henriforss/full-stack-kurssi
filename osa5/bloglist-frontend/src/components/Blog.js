@@ -44,9 +44,11 @@ const Blog = ({ blog, user, setBlogs }) => {
   if (showDetails === false) {
     return (
       <div style={nodetails}>
-        <div>
+        <div className="blog-element">
           {blog.title} by {blog.author}
-          <button onClick={toggleDetails}>Show</button>
+          <button
+            id="show-details"
+            onClick={toggleDetails}>Show</button>
         </div>
       </div>
     )
@@ -60,9 +62,11 @@ const Blog = ({ blog, user, setBlogs }) => {
         <div>
           URL: {blog.url}
         </div>
-        <div>
+        <div className="likes">
           Likes: {likes}
-          <button onClick={handleLike}>Like</button>
+          <button
+            id="like-button"
+            onClick={handleLike}>Like</button>
         </div>
         <div>
           Added by: {blog.user.name}

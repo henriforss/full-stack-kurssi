@@ -18,7 +18,9 @@ const DeleteButton = ({ blog, user, setBlogs }) => {
 
   if (blog.user.username === user.username) {
     return (
-      <button onClick={handleDelete}>Delete</button>
+      <button
+        id="delete-button"
+        onClick={handleDelete}>Delete</button>
     )
   }
 }
