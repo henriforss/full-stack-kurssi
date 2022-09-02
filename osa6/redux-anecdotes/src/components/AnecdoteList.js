@@ -6,7 +6,17 @@ import { hideNotification, showNotification } from "../reducers/notificationRedu
 const AnecdoteList = () => {
 
   /* Access state. */
-  const anecdotes = useSelector(state => state.anecdotes)
+  let anecdotes = useSelector(state => state.anecdotes)
+  const filter = useSelector(state => state.filter)
+
+  /* Filter anecdotes by filter. */
+  anecdotes = anecdotes.filter(a => {
+    const anecdote = a.content.toLowerCase()
+    const includesFilter = anecdote.includes(filter) 
+    if (includesFilter) {
+      return a
+    }
+  })
 
   /* This is a redux hook. */
   const dispatch = useDispatch()
@@ -23,6 +33,9 @@ const AnecdoteList = () => {
   
   return (
     <div>
+      {/* {anecdotes.filter(a => a.includes(filter))} */}
+
+
       {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote =>  // sort and map
         <div key={anecdote.id}>
           <div>
