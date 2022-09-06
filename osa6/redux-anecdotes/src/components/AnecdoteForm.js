@@ -1,23 +1,20 @@
-import { useDispatch } from "react-redux"
+/* Note: this version uses connect() to access store, previous version uses hooks.
+Previous version is better. */
+
+import { connect } from "react-redux"
 import { createAnecdote } from "../reducers/anecdoteReducer"
-import { showNotification, hideNotification } from "../reducers/notificationReducer"
+import { setNotification } from "../reducers/notificationReducer"
 
 /* Component. */
-const AnecdoteForm = () => {
-
-  /* Create a redux hook. */
-  const dispatch = useDispatch()
+const AnecdoteForm = (props) => {
   
   /* Handle form. */
   const newAnecdote = async (event) => {
     event.preventDefault()
     const content = event.target.note.value
     event.target.note.value = ""
-    dispatch(createAnecdote(content))
-    dispatch(showNotification(newAnecdote.content))
-    setTimeout(() => {
-      dispatch(hideNotification(newAnecdote.content))
-    }, 5000)
+    props.createAnecdote(content)
+    props.setNotification(`New note: ${content}`, 5)
   }
   
   return (
@@ -31,4 +28,18 @@ const AnecdoteForm = () => {
   )
 }
 
-export default AnecdoteForm
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createAnecdote: (value) => {
+      dispatch(createAnecdote(value))
+    },
+    setNotification: (content, time) => {
+      dispatch(setNotification(content, time))
+    }
+  }
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AnecdoteForm)
