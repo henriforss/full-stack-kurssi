@@ -1,0 +1,53 @@
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "name": "Blog User",
+  "username": "bloguser1",
+  "password": "blog"
+}
+
+
+
+###
+
+
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "name": "Blog User",
+  "username": "bloguser2",
+  "password": "blog"
+}
+
+
+
+###
+
+
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "name": "Blog User",
+  "username": "bloguser3",
+  "password": "blog"
+}
+
+
+
+###
+
+
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "name": "Blog User",
+  "username": "bloguser4",
+  "password": "blog"
+}

@@ -1,0 +1,179 @@
+<!-- Random file for testing bits of Javascript code. -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>
+      Test
+    </title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
+
+    <script>
+
+      /* Helper functions. */
+
+      /* Array of blogs for testing. */
+      const blogs = [
+        {
+          _id: "5a422a851b54a676234d17f7",
+          title: "React patterns",
+          author: "Michael Chan",
+          url: "https://reactpatterns.com/",
+          likes: 7,
+          __v: 0
+        },
+        {
+          _id: "5a422aa71b54a676234d17f8",
+          title: "Go To Statement Considered Harmful",
+          author: "Edsger W. Dijkstra",
+          url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+          likes: 5,
+          __v: 0
+        },
+        {
+          _id: "5a422b3a1b54a676234d17f9",
+          title: "Canonical string reduction",
+          author: "Edsger W. Dijkstra",
+          url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+          likes: 12,
+          __v: 0
+        },
+        {
+          _id: "5a422b891b54a676234d17fa",
+          title: "First class tests",
+          author: "Robert C. Martin",
+          url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+          likes: 10,
+          __v: 0
+        },
+        {
+          _id: "5a422ba71b54a676234d17fb",
+          title: "TDD harms architecture",
+          author: "Robert C. Martin",
+          url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
+          likes: 0,
+          __v: 0
+        },
+        {
+          _id: "5a422bc61b54a676234d17fc",
+          title: "Type wars",
+          author: "Robert C. Martin",
+          url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+          likes: 2,
+          __v: 0
+        }  
+      ]
+
+      /* Dummy-function for testing. */
+      const dummy = (blogs) => {
+        return 1
+      }
+
+      /* Aggregate likes from all blogs. */
+      const totalLikes = (blogs) => {
+
+        let initialValue = 0
+        let sum = blogs.reduce((previousValue, currentValue) => {
+          return previousValue + currentValue.likes
+        }, initialValue)
+
+        console.log("Total:", sum)
+      }
+
+      /* Call totalLikes. */
+      totalLikes(blogs)
+
+      /* Find most popular blog. */
+      const favoriteBlog = (blogs) => {
+        
+        /* Max value by for-loop. */
+        let index = 0
+        let maxValue = 0
+        for (let i = 0; i < blogs.length; i++) {
+          console.log("Arr:", i, "Likes:", blogs[i].likes)
+          if (blogs[i].likes > maxValue) {
+            maxValue = blogs[i].likes
+            index = i
+          }
+        }
+        console.log(`Max: ${maxValue}; Index: ${index}`)
+
+        console.log({ 
+          "title": blogs[index].title,
+          "author": blogs[index].author,
+          "likes": blogs[index].likes 
+        })
+      }
+
+      /* Call favoriteBlog. */
+      favoriteBlog(blogs)      
+
+      /* Find author with most blogs. */
+      const mostBlogs =(blogs) => {
+        
+        /* Use lodash grouBy to group according to 
+        object attribute "author". */
+        const grouped = _.groupBy(blogs, "author")
+        
+        console.log("Grouped:", grouped)
+
+        /* Order group according to size. */
+        const ordered = _.orderBy(grouped, _.size)
+        
+        console.log("Ordered:", ordered)
+
+        /* Reverse "ordered". */
+        const reversed = _.reverse(ordered)
+
+        console.log("Reversed:", reversed)
+
+        /* Select largest group and return "author"
+        and number of blogs. */
+        console.log({
+          "author": reversed[0][0].author,
+          "blogs": reversed[0].length
+        }) 
+      }
+
+      /* Call mostBlogs. */
+      mostBlogs(blogs)
+
+      /* Find author with most likes. */
+      const mostLikes = (blogs) => {
+        
+        /* Group by author. */
+        const grouped = _.groupBy(blogs, "author")
+      
+        /* Map values and sum by "likes". */
+        const mapped = _.mapValues(grouped, (o) => {
+          const sumLikes = _.sumBy(o, "likes")
+          return sumLikes
+        })
+
+        /* Create an array with keys. */
+        const array = Object.keys(mapped)
+
+        /* Sort array with keys somehow.
+        I don't understand what happens here. */
+        array.sort((a, b) => mapped[b] - mapped[a])
+
+        /* Select author with most blogs by slicing array.
+        I don't understand this. */
+        const author = array.slice(0,1)
+
+        /* Correct answer. */
+        console.log("Author with most blogs:", author[0], mapped[author])
+        
+      }
+
+      /* Call mostLikes. */
+      mostLikes(blogs)
+
+
+
+    </script>
+  </body>
+</html>
