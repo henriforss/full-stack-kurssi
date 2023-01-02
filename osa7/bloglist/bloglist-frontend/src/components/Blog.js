@@ -1,14 +1,18 @@
 /* Import necessary modules. */
 import { useState } from "react";
 import PropTypes from "prop-types";
-import blogService from "../services/blogs";
 import DeleteButton from "./DeleteButton";
+import { useDispatch } from "react-redux";
+import { addLike } from "../reducers/blogReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
 /* Function to display blog post. */
-const Blog = ({ blog, user, setBlogs }) => {
+const Blog = ({ blog, user }) => {
   /* Define variable "showDetails". */
   const [showDetails, setShowDetails] = useState(false);
-  const [likes, setLikes] = useState(blog.likes);
+
+  /* Redux hooks. */
+  const dispatch = useDispatch();
 
   /* Function to toggle details. */
   const toggleDetails = () => {
@@ -32,12 +36,13 @@ const Blog = ({ blog, user, setBlogs }) => {
     color: "DimGrey",
   };
 
-  /* Function to add like. The likes in the frontend are updated after
-  the database is updated. */
-  const handleLike = async () => {
-    blog.likes = likes + 1;
-    const response = await blogService.addLike(blog);
-    setLikes(response.likes);
+  /* Function to like blog. No error handling here either. */
+  const likeBlog = (blog) => {
+    const likedBlog = { ...blog, likes: blog.likes + 1 };
+    dispatch(addLike(likedBlog));
+    dispatch(
+      setNotification(`Success: You liked blog "${blog.title}"`, 5, "success")
+    );
   };
 
   /* Render showDetails === true or showdetails === false. */
@@ -61,14 +66,14 @@ const Blog = ({ blog, user, setBlogs }) => {
         </div>
         <div>URL: {blog.url}</div>
         <div className="likes">
-          Likes: {likes}
-          <button id="like-button" onClick={handleLike}>
+          Likes: {blog.likes}
+          <button id="like-button" onClick={() => likeBlog(blog)}>
             Like
           </button>
         </div>
         <div>Added by: {blog.user.name}</div>
         <div>
-          <DeleteButton blog={blog} user={user} setBlogs={setBlogs} />
+          <DeleteButton blog={blog} user={user} />
         </div>
       </div>
     );
@@ -78,8 +83,6 @@ const Blog = ({ blog, user, setBlogs }) => {
 /* Define propTypes. */
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  setBlogs: PropTypes.func.isRequired,
 };
 
 export default Blog;

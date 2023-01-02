@@ -1,18 +1,20 @@
 /* Import necessary modules. */
-import blogService from "../services/blogs";
+import { useDispatch } from "react-redux";
+import { destroyBlog } from "../reducers/blogReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
 /* Component to delete blog post if owner of blog post is user. */
-const DeleteButton = ({ blog, user, setBlogs }) => {
+const DeleteButton = ({ blog, user }) => {
   const token = user.token;
   const id = blog._id;
+
+  const dispatch = useDispatch();
 
   const handleDelete = async () => {
     const confirm = window.confirm(`Delete blog: ${blog.title}?`);
     if (confirm) {
-      const response = await blogService.remoweBlog({ id, token });
-      console.log(response);
-      const blogs = await blogService.getAll();
-      setBlogs(blogs);
+      dispatch(destroyBlog({ id, token }));
+      dispatch(setNotification(`Blog deleted: ${blog.title}`, 5, "success"));
     }
   };
 

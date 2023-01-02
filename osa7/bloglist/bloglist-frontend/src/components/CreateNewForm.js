@@ -1,32 +1,40 @@
 /* Import necessary modules. */
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setNotification } from "../reducers/notificationReducer";
+import { createBlog } from "../reducers/blogReducer";
 
 /* Render form for create new blog. */
-const CreateNewForm = (props) => {
+const CreateNewForm = ({ user, createNewFormRef }) => {
   /* Define variables with useState. */
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-  /* Bring "user" variable with props. It is needed in "blogObject",
-  but probably also in App.js. Variables "title", "author", and "url" are
-  probably not needed in App.js. */
-  const user = props.user;
+  /* Redux hooks. */
+  const dispatch = useDispatch();
 
-  /* Create a blogObject with blog info. On submit
-  createBlogOject passes blogObject to props.handleCreateNew,
-  and resets variables. */
-  const createBlogObject = (event) => {
+  /* Function to submit new blog. No error handling. Did not get it. */
+  const submitBlog = async (event) => {
     event.preventDefault();
-    props.handleCreateNew({ user, title, author, url });
-    setTitle("");
-    setAuthor("");
-    setUrl("");
+    if (title && url) {
+      const blogObject = { user, title, author, url };
+      dispatch(createBlog(blogObject));
+      dispatch(
+        setNotification(`Blog added : ${title} by ${author}`, 5, "success")
+      );
+      setTitle("");
+      setAuthor("");
+      setUrl("");
+      createNewFormRef.current.toggleVisibility();
+    } else {
+      dispatch(setNotification("Title or URL missing", 5, "error"));
+    }
   };
 
   return (
     <div>
-      <form onSubmit={createBlogObject}>
+      <form onSubmit={submitBlog}>
         <div>
           Title:
           <input

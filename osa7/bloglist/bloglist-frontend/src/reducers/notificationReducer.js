@@ -35,8 +35,6 @@ let timeout = null;
 
 /* This is a function that returns whatever should be dispatched to the store. This can be async, which might be useful if you need to communicate with a database. At the moment it is not async because there is no communication with a database. Check out the redux-anecdotes app for an example which includes async operations.*/
 export const setNotification = (string, seconds, className) => {
-  console.log("notification:", string, seconds, className);
-
   /* Dispatch here is a variable name. It represents the "dispatch" that calls the setNotification function. That is, what it really returns is the part inside the parenthesis. Then the dispatch is called in app.js. It took me a long time to understand this, I'm not sure if I still quite understand how it works. Anyway, the setNotification function is used if you want to perform async operations on whatever you're dispatching. Like if you have a database with notes. When you dispatch you call this function instead of calling the reducer directly, this function performs whatever async operation, like uploading a new note to the database, and afterwards dispatches the action and the new value to the store. showNotification is the action and the store knows about it, the value is the value. */
   const dispatchdata = (dispatch) => {
     /* First update the style className. */
