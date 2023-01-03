@@ -10,7 +10,7 @@ const getAll = async () => {
   return response.data;
 };
 
-/* Create new blog. */
+/* Create new blog. Props includes user (object), title, author, and url (all strings).*/
 const createNew = async (props) => {
   const token = `Bearer ${props.user.token}`;
   const config = {

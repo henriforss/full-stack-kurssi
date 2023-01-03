@@ -33,11 +33,15 @@ const blogSlice = createSlice({
       const idOfDeletedBlog = action.payload._id;
       return state.filter((item) => item._id !== idOfDeletedBlog);
     },
+    eraseState: (state, action) => {
+      return [];
+    },
   },
 });
 
 /* We need to export the action types, so that we can use them when we dispatch actions. */
-export const { setBlogs, appendBlog, likeBlog, deleteBlog } = blogSlice.actions;
+export const { setBlogs, appendBlog, likeBlog, deleteBlog, eraseState } =
+  blogSlice.actions;
 
 /* This is a helper function. It is called with a useEffect in the app. This helper funtion is passed to the dispatch, it communicates with the database and gets the blogs, then it returns the correct action type and the blogs, which will be set in the state. This function can not be async, it must be a plain object, using async needs middleware or must be written like below. */
 export const initializeBlogs = () => {
@@ -61,22 +65,27 @@ export const createBlog = (blogObject) => {
   return toDispatch;
 };
 
+/* The reason I'm having a hard time undertanding what happens here is that this is redux syntax. This is actually a redux thunk middleware function and redux thunk is included in redux toolkit. This pattern is explained in the redux ducomentation. */
 export const addLike = (blogObject) => {
   const toDispatch = async (dispatch) => {
     const response = await blogService.addLike(blogObject);
-    console.log("response", response);
     dispatch(likeBlog(response));
   };
   return toDispatch;
 };
 
 export const destroyBlog = ({ id, token }) => {
-  const toDispatch = async (dispatch) => {
+  return async (dispatch) => {
     const response = await blogService.remoweBlog({ id, token });
     dispatch(deleteBlog(response.data));
   };
+};
 
-  return toDispatch;
+/* This function is used when the user logs out. The blogs array is reset in state. */
+export const removeBlogsFromState = () => {
+  return (dispatch) => {
+    dispatch(eraseState());
+  };
 };
 
 /* We need to export the blogSlice. More specific we need to export the reducer function of the blogSlice. */

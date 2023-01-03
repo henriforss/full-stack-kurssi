@@ -1,10 +1,12 @@
 /* Import necessary libraries/modules. */
 import { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "./reducers/notificationReducer";
 import { initializeBlogs } from "./reducers/blogReducer";
-
 import loginService from "./services/login";
+import { setLoggedUserInState } from "./reducers/userReducer";
+
+/* Components. */
 import CreateNewForm from "./components/CreateNewForm";
 import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
@@ -14,56 +16,35 @@ import BlogList from "./components/BlogList";
 
 /* The app itself. */
 const App = () => {
-  /* Define variables. */
-  // const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
-
   /* Redux hooks. */
   const dispatch = useDispatch();
+
+  /* Access state to get user. */
+  const user = useSelector((state) => state.user);
 
   /* Check if there is a user in window.localStorage. This is the first thing we do. */
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      setUser(user);
+      dispatch(setLoggedUserInState(user));
     }
   }, []);
 
   /* Get initial blogs with useEffect. */
   useEffect(() => {
-    /* This is where we dispatch to get all blogs. Notice that what we pass is a function. I missed this and spent an hour looking for an error. */
-    dispatch(initializeBlogs());
-  }, [dispatch]);
-
-  /* Handle log in. */
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
-      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
-      setUser(user);
-      setUsername("");
-      setPassword("");
-      /* I wrote somewhere that className="success" is not used. Well, now it is. This functionality was previously handled by useState, now by redux. */
-      dispatch(setNotification("Success: You have logged in.", 5, "success"));
-    } catch (exception) {
-      /* This dispatch takes the function setNotification. The async function returns what would be the contents of the parenthesis. This is a little bit hard to understand. The parameters are: the message, seconds to show it, className of style to use. */
-      dispatch(
-        setNotification("Error: Wrong username or password.", 5, "error")
-      );
+    if (user) {
+      /* This is where we dispatch to get all blogs. Notice that what we pass is a function. I missed this and spent an hour looking for an error. */
+      dispatch(initializeBlogs());
     }
-  };
+  }, [user]); // DOES THIS WORK OR NOT?
+
+  console.log(user);
 
   /* Handle log out. */
   const handleLogout = () => {
     window.localStorage.removeItem("loggedBlogappUser");
-    setUser(null);
+    // setUser(null);
   };
 
   /* Use useRef to get toggleVisibility
@@ -76,13 +57,7 @@ const App = () => {
       <div>
         <Notification />
         <h2>Log in to application</h2>
-        <LoginForm
-          handleLogin={handleLogin}
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-        />
+        <LoginForm />
       </div>
     );
   }
@@ -93,7 +68,9 @@ const App = () => {
       <Notification />
       <h2>Blogs</h2>
       <div>
-        <LoginStatus handleLogout={handleLogout} user={user} />
+        <LoginStatus
+        // handleLogout={handleLogout} user={user}
+        />
       </div>
       <div>
         <Togglable buttonlabel="Create new blog" ref={createNewFormRef}>
