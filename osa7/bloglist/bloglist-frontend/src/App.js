@@ -1,9 +1,7 @@
 /* Import necessary libraries/modules. */
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setNotification } from "./reducers/notificationReducer";
 import { initializeBlogs } from "./reducers/blogReducer";
-import loginService from "./services/login";
 import { setLoggedUserInState } from "./reducers/userReducer";
 
 /* Components. */
@@ -37,15 +35,7 @@ const App = () => {
       /* This is where we dispatch to get all blogs. Notice that what we pass is a function. I missed this and spent an hour looking for an error. */
       dispatch(initializeBlogs());
     }
-  }, [user]); // DOES THIS WORK OR NOT?
-
-  console.log(user);
-
-  /* Handle log out. */
-  const handleLogout = () => {
-    window.localStorage.removeItem("loggedBlogappUser");
-    // setUser(null);
-  };
+  }, [user]);
 
   /* Use useRef to get toggleVisibility
   from "./components/CreateNewForm.js. */
@@ -68,18 +58,16 @@ const App = () => {
       <Notification />
       <h2>Blogs</h2>
       <div>
-        <LoginStatus
-        // handleLogout={handleLogout} user={user}
-        />
+        <LoginStatus />
       </div>
       <div>
         <Togglable buttonlabel="Create new blog" ref={createNewFormRef}>
           <h2>Create new</h2>
-          <CreateNewForm user={user} createNewFormRef={createNewFormRef} />
+          <CreateNewForm createNewFormRef={createNewFormRef} />
         </Togglable>
       </div>
       <br />
-      <BlogList user={user} />
+      <BlogList />
     </div>
   );
 };

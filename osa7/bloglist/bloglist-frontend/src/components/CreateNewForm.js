@@ -1,15 +1,18 @@
 /* Import necessary modules. */
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../reducers/notificationReducer";
 import { createBlog } from "../reducers/blogReducer";
 
 /* Render form for create new blog. */
-const CreateNewForm = ({ user, createNewFormRef }) => {
+const CreateNewForm = ({ createNewFormRef }) => {
   /* Define variables with useState. */
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+
+  /* Redux state. */
+  const user = useSelector((state) => state.user);
 
   /* Redux hooks. */
   const dispatch = useDispatch();

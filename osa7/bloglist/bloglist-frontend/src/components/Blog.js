@@ -2,14 +2,17 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import DeleteButton from "./DeleteButton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addLike } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
 
 /* Function to display blog post. */
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
   /* Define variable "showDetails". */
   const [showDetails, setShowDetails] = useState(false);
+
+  /* Redux state. */
+  const user = useSelector((state) => state.user);
 
   /* Redux hooks. */
   const dispatch = useDispatch();
