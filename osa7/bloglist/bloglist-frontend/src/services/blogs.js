@@ -2,9 +2,7 @@
 import axios from "axios";
 const baseUrl = "/api/blogs";
 
-/* Get all blog. Note: this action requires
-the user to be logged in, but the user's token is
-not included in the request as per backend. */
+/* Get all blog. Note: this action requires the user to be logged in, but the user's token is not included in the request as per backend. */
 const getAll = async () => {
   const response = await axios.get(baseUrl);
   return response.data;
@@ -30,8 +28,7 @@ const createNew = async (props) => {
   return response.data;
 };
 
-/* Update likes. The props come from "./components/blog.js. The response
-is sent back and the likes are updated in the frontend. */
+/* Update likes. The props come from "./components/blog.js. The response is sent back and the likes are updated in the frontend. */
 const addLike = async (props) => {
   const id = props._id;
   const newLikes = props.likes;
@@ -45,8 +42,7 @@ const addLike = async (props) => {
   return response.data;
 };
 
-/* Remowe blog. The props come from ./components/blog.js. The response
-is sent back and the blogs-array is updated. */
+/* Remowe blog. The props come from ./components/blog.js. The response is sent back and the blogs-array is updated. */
 const remoweBlog = async (props) => {
   const id = props.id;
   const token = `Bearer ${props.token}`;

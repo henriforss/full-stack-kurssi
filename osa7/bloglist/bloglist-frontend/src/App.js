@@ -1,16 +1,19 @@
 /* Import necessary libraries/modules. */
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { setLoggedUserInState } from "./reducers/userReducer";
+import { initializeUsers } from "./reducers/usersReducer";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 /* Components. */
-import CreateNewForm from "./components/CreateNewForm";
 import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
-import LoginStatus from "./components/LoginStatus";
-import Togglable from "./components/Togglable";
 import BlogList from "./components/BlogList";
+import Users from "./components/Users";
+import User from "./components/User";
+import Blog from "./components/Blog";
+import Navbar from "./components/Navbar";
 
 /* The app itself. */
 const App = () => {
@@ -29,17 +32,15 @@ const App = () => {
     }
   }, []);
 
-  /* Get initial blogs with useEffect. */
+  /* Get initial blogs and users with useEffect. */
   useEffect(() => {
     if (user) {
       /* This is where we dispatch to get all blogs. Notice that what we pass is a function. I missed this and spent an hour looking for an error. */
       dispatch(initializeBlogs());
+      /* This is where we get the initial users. */
+      dispatch(initializeUsers());
     }
   }, [user]);
-
-  /* Use useRef to get toggleVisibility
-  from "./components/CreateNewForm.js. */
-  const createNewFormRef = useRef();
 
   /* If user is not logged in. */
   if (user === null) {
@@ -54,21 +55,19 @@ const App = () => {
 
   /* If user is logged in. */
   return (
-    <div>
-      <Notification />
-      <h2>Blogs</h2>
+    <BrowserRouter>
       <div>
-        <LoginStatus />
+        <Notification />
+        <Navbar />
+        <h2>Blogs</h2>
+        <Routes>
+          <Route path="/" element={<BlogList />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/:id" element={<User />} />
+          <Route path="/blogs/:id" element={<Blog />} />
+        </Routes>
       </div>
-      <div>
-        <Togglable buttonlabel="Create new blog" ref={createNewFormRef}>
-          <h2>Create new</h2>
-          <CreateNewForm createNewFormRef={createNewFormRef} />
-        </Togglable>
-      </div>
-      <br />
-      <BlogList />
-    </div>
+    </BrowserRouter>
   );
 };
 

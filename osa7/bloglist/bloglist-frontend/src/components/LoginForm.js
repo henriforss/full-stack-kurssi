@@ -1,6 +1,6 @@
 /* Import necessary modules. */
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { loginUser } from "../reducers/userReducer";
 
 /* Render form for log in. */
@@ -11,9 +11,6 @@ const LoginForm = () => {
 
   /* Redux hook. */
   const dispatch = useDispatch();
-
-  const fullState = useSelector((state) => state);
-  console.log(fullState);
 
   /* Handle submit. */
   const handleSubmit = (event) => {

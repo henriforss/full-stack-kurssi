@@ -1,25 +1,47 @@
+import { useRef } from "react";
 import { useSelector } from "react-redux";
-import Blog from "./Blog";
+import Togglable from "./Togglable";
+import CreateNewForm from "./CreateNewForm";
 
 const BlogList = () => {
   /* Access state. */
   const blogs = useSelector((state) => state.blog);
-  const user = useSelector((state) => state.user);
+
+  const fullState = useSelector((state) => state);
+  console.log(fullState);
+
+  /* useRef() to grab Togglable element. */
+  const createNewFormRef = useRef();
 
   /* Copy state to a new array and sort it. */
-  const items = [...blogs];
-  const sorted = items.sort((a, b) => b.likes - a.likes);
+  const sorted = [...blogs].sort((a, b) => b.likes - a.likes);
 
-  console.log(blogs);
-  console.log(user);
+  if (!sorted) {
+    return null;
+  } else {
+    return (
+      <div>
+        <div>
+          <Togglable buttonlabel="Create new blog" ref={createNewFormRef}>
+            <h2>Create new</h2>
+            <CreateNewForm createNewFormRef={createNewFormRef} />
+          </Togglable>
+        </div>
 
-  return (
-    <div id="list-blogs">
-      {sorted.map((blog) => (
-        <Blog key={blog._id} blog={blog} />
-      ))}
-    </div>
-  );
+        <div>
+          {sorted.map((blog, i) => {
+            return (
+              <div key={i}>
+                <a href={`/blogs/${blog._id}`}>
+                  {blog.title} by {blog.author}
+                </a>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 };
 
 export default BlogList;

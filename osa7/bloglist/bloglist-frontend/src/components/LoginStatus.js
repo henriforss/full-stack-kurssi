@@ -16,10 +16,10 @@ const LoginStatus = () => {
     dispatch(setNotification("Logged out.", 5, "success"));
   };
   return (
-    <div>
+    <>
       <i>{user.name}</i> logged in.
       <button onClick={handleLogout}>Log out</button>
-    </div>
+    </>
   );
 };
 
