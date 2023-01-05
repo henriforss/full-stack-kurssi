@@ -1,5 +1,4 @@
 /* Import necessary modules. */
-import { useState } from "react";
 import DeleteButton from "./DeleteButton";
 import { useDispatch, useSelector } from "react-redux";
 import { addLike } from "../reducers/blogReducer";
@@ -52,6 +51,13 @@ const Blog = () => {
         <div>
           <DeleteButton blog={selectedBlog} user={user} />
         </div>
+
+        <h4>Comments</h4>
+        <ul>
+          {selectedBlog.comments.map((comment, i) => {
+            return <li key={i}>{comment}</li>;
+          })}
+        </ul>
       </div>
     );
   }
