@@ -1,7 +1,7 @@
 /* Create Mongoose Schema for blog.. */
 
 /* Import necessary modules. */
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 /* Create Mongoose Schema. If likes is undefined,
 assign default value 0. */
@@ -14,7 +14,8 @@ const blogSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-})
+  comments: [String],
+});
 
 /* Export module. */
-module.exports = mongoose.model("Blog", blogSchema)
+module.exports = mongoose.model("Blog", blogSchema);

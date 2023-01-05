@@ -54,4 +54,27 @@ const remoweBlog = async (props) => {
   return response;
 };
 
-export default { getAll, createNew, addLike, remoweBlog };
+const commentThisBlog = async (props) => {
+  /* Get blog id. */
+  const id = props.id;
+
+  /* Define token. */
+  const token = `Bearer ${props.token}`;
+
+  /* Define headers. */
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  /* Make the request. */
+  const response = await axios.post(
+    `${baseUrl}/${id}/comments`,
+    { comment: props.comment },
+    config
+  );
+
+  /* Return response. */
+  return response;
+};
+
+export default { getAll, createNew, addLike, remoweBlog, commentThisBlog };

@@ -2,6 +2,7 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 import blogService from "../services/blogs";
+import { setNotification } from "./notificationReducer";
 
 /* The initial state for the blogs is an empty array. */
 const initialState = [];
@@ -36,12 +37,23 @@ const blogSlice = createSlice({
     eraseState: (state, action) => {
       return [];
     },
+    commentBlog: (state, action) => {
+      const id = action.payload._id;
+      const updatedBlog = action.payload;
+      return state.map((item) => (item._id !== id ? item : updatedBlog));
+    },
   },
 });
 
 /* We need to export the action types, so that we can use them when we dispatch actions. */
-export const { setBlogs, appendBlog, likeBlog, deleteBlog, eraseState } =
-  blogSlice.actions;
+export const {
+  setBlogs,
+  appendBlog,
+  likeBlog,
+  deleteBlog,
+  eraseState,
+  commentBlog,
+} = blogSlice.actions;
 
 /* This is a helper function. It is called with a useEffect in the app. This helper funtion is passed to the dispatch, it communicates with the database and gets the blogs, then it returns the correct action type and the blogs, which will be set in the state. This function can not be async, it must be a plain object, using async needs middleware or must be written like below. */
 export const initializeBlogs = () => {
@@ -85,6 +97,27 @@ export const destroyBlog = ({ id, token }) => {
 export const removeBlogsFromState = () => {
   return (dispatch) => {
     dispatch(eraseState());
+  };
+};
+
+/* Add comment to blog. */
+export const addComment = (props) => {
+  const { user, id, comment } = props;
+  const token = user.token;
+
+  return async (dispatch) => {
+    try {
+      const commentedBlog = await blogService.commentThisBlog({
+        token,
+        id,
+        comment,
+      });
+      dispatch(commentBlog(commentedBlog.data));
+      dispatch(setNotification(`Comment added "${comment}".`, 5, "success"));
+    } catch (error) {
+      console.log(error);
+      dispatch(setNotification("Error", 5, "error"));
+    }
   };
 };
 

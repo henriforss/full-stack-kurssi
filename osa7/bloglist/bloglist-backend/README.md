@@ -1,3 +1,3 @@
-Full Stack Open 2022
-====
-Osa 4: Blogilista.
+# Full Stack Open 2022
+
+Osa 7: Bloglist backend.

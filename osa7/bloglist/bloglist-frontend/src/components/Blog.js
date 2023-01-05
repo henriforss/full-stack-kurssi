@@ -1,12 +1,16 @@
 /* Import necessary modules. */
 import DeleteButton from "./DeleteButton";
 import { useDispatch, useSelector } from "react-redux";
-import { addLike } from "../reducers/blogReducer";
+import { addLike, addComment } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 /* Function to display blog post. */
 const Blog = () => {
+  /* Local variables. */
+  const [comment, setComment] = useState("");
+
   /* Get params from React Router. */
   const params = useParams();
   const id = params.id;
@@ -30,6 +34,15 @@ const Blog = () => {
     );
   };
 
+  /* Function to handle add comment. */
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (comment) {
+      dispatch(addComment({ user, id, comment }));
+      setComment("");
+    }
+  };
+
   if (!selectedBlog) {
     return null;
   } else {
@@ -38,14 +51,13 @@ const Blog = () => {
         <h3>
           {selectedBlog.title} by {selectedBlog.author}
         </h3>
+
         <div>
           URL: <a href={selectedBlog.url}>{selectedBlog.url}</a>
         </div>
-        <div className="likes">
+        <div>
           Likes: {selectedBlog.likes}
-          <button id="like-button" onClick={() => likeBlog(selectedBlog)}>
-            Like
-          </button>
+          <button onClick={() => likeBlog(selectedBlog)}>Like</button>
         </div>
         <div>Added by: {selectedBlog.user.name}</div>
         <div>
@@ -53,6 +65,15 @@ const Blog = () => {
         </div>
 
         <h4>Comments</h4>
+
+        <form onSubmit={handleSubmit}>
+          <input
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          ></input>
+          <button type="submit">Add comment</button>
+        </form>
+
         <ul>
           {selectedBlog.comments.map((comment, i) => {
             return <li key={i}>{comment}</li>;

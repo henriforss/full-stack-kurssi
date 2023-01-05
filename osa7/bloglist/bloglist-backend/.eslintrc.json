@@ -1,58 +1,31 @@
 {
-    "env": {
-        "browser": true,
-        "commonjs": true,
-        "es2021": true,
-        "jest": true,
-        "node": true
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true,
+    "jest": true,
+    "node": true
+  },
+  "root": true,
+  "extends": ["plugin:react/recommended", "airbnb"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     },
-    "root": true,
-    "extends": [
-        "plugin:react/recommended",
-        "airbnb"
-    ],
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": "latest"
-    },
-    "plugins": [
-        "react"
-    ],
-    "rules": {
-        "indent": [
-            "error",
-            2
-          ],
-          "eqeqeq": "error",
-          "no-trailing-spaces": "error",
-          "object-curly-spacing": [
-            "error", "always"
-          ],
-          "arrow-spacing": [
-            "error", { "before": true, "after": true }
-          ],
-          "no-console": "off",
-          "linebreak-style": [
-            "error",
-            "unix"
-          ],
-          "quotes": [
-            "error",
-            "double"
-          ],
-          "semi": [
-            "error",
-            "never"
-          ],
-          "object-curly-newline": [
-            "error", 
-            { "multiline": true }
-          ],
-          "function-paren-newline": [
-            "error",
-            "never"
-          ]
-    }
+    "ecmaVersion": "latest"
+  },
+  "plugins": ["react"],
+  "rules": {
+    "indent": ["error", 2],
+    "eqeqeq": "error",
+    "no-trailing-spaces": "error",
+    "object-curly-spacing": ["error", "always"],
+    "arrow-spacing": ["error", { "before": true, "after": true }],
+    "no-console": "off",
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "double"],
+    "semi": ["always", "never"],
+    "object-curly-newline": ["error", { "multiline": true }],
+    "function-paren-newline": ["error", "never"]
+  }
 }
