@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { Alert } from "react-bootstrap";
 
 /* Render notification. */
 const Notification = () => {
@@ -8,7 +9,11 @@ const Notification = () => {
   if (notificationMessage === null) {
     return null;
   } else {
-    return <div className={notificationStyle}>{notificationMessage}</div>;
+    return (
+      <Alert className={`alert alert-${notificationStyle}`}>
+        {notificationMessage}
+      </Alert>
+    );
   }
 };
 

@@ -1,5 +1,6 @@
 /* Component to Toggle visible. */
 import { useState, useImperativeHandle, forwardRef } from "react";
+import { Button } from "react-bootstrap";
 
 const Togglable = forwardRef((props, ref) => {
   const [createNewVisible, setCreateNewVisible] = useState(false);
@@ -21,12 +22,12 @@ const Togglable = forwardRef((props, ref) => {
     <div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={toggleVisibility}>Cancel</button>
+        <Button onClick={toggleVisibility}>Cancel</Button>
       </div>
       <div style={hideWhenVisible}>
-        <button id="newblog-button" onClick={toggleVisibility}>
+        <Button id="newblog-button" onClick={toggleVisibility}>
           {props.buttonlabel}
-        </button>
+        </Button>
       </div>
     </div>
   );

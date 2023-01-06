@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../reducers/notificationReducer";
 import { createBlog } from "../reducers/blogReducer";
+import { Button } from "react-bootstrap";
 
 /* Render form for create new blog. */
 const CreateNewForm = ({ createNewFormRef }) => {
@@ -31,7 +32,7 @@ const CreateNewForm = ({ createNewFormRef }) => {
       setUrl("");
       createNewFormRef.current.toggleVisibility();
     } else {
-      dispatch(setNotification("Title or URL missing", 5, "error"));
+      dispatch(setNotification("Title or URL missing", 5, "danger"));
     }
   };
 
@@ -68,9 +69,9 @@ const CreateNewForm = ({ createNewFormRef }) => {
             onChange={(event) => setUrl(event.target.value)}
           />
         </div>
-        <button id="create-button" type="submit">
+        <Button id="create-button" type="submit">
           Create
-        </button>
+        </Button>
       </form>
     </div>
   );

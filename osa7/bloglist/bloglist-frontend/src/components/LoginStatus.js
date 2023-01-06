@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../reducers/userReducer";
 import { setNotification } from "../reducers/notificationReducer";
+import { Button } from "react-bootstrap";
 
 /* Render log in status. */
 const LoginStatus = () => {
@@ -18,7 +19,7 @@ const LoginStatus = () => {
   return (
     <>
       <i>{user.name}</i> logged in.
-      <button onClick={handleLogout}>Log out</button>
+      <Button onClick={handleLogout}>Log out</Button>
     </>
   );
 };

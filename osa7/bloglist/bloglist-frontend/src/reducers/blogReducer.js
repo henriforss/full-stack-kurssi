@@ -116,7 +116,7 @@ export const addComment = (props) => {
       dispatch(setNotification(`Comment added "${comment}".`, 5, "success"));
     } catch (error) {
       console.log(error);
-      dispatch(setNotification("Error", 5, "error"));
+      dispatch(setNotification("Error", 5, "danger"));
     }
   };
 };

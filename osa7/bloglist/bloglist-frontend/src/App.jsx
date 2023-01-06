@@ -45,9 +45,9 @@ const App = () => {
   /* If user is not logged in. */
   if (user === null) {
     return (
-      <div>
+      <div className="container">
         <Notification />
-        <h2>Log in to application</h2>
+        <h2>Log in to Bloglist</h2>
         <LoginForm />
       </div>
     );
@@ -56,7 +56,7 @@ const App = () => {
   /* If user is logged in. */
   return (
     <BrowserRouter>
-      <div>
+      <div className="container">
         <Notification />
         <Navbar />
         <h2>Blogs</h2>

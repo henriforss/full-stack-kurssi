@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../reducers/userReducer";
+import { Form, Button } from "react-bootstrap";
 
 /* Render form for log in. */
 const LoginForm = () => {
@@ -20,31 +21,28 @@ const LoginForm = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          username
-          <input
-            id="username"
+      <Form onSubmit={handleSubmit}>
+        <Form.Group>
+          <Form.Label>Username:</Form.Label>
+          <Form.Control
             type="text"
             value={username}
-            name="Username"
+            name="username"
             onChange={(event) => setUsername(event.target.value)}
           />
-        </div>
-        <div>
-          password
-          <input
-            id="password"
+          <Form.Label>Password:</Form.Label>
+
+          <Form.Control
             type="password"
             value={password}
-            name="Password"
+            name="password"
             onChange={(event) => setPassword(event.target.value)}
           />
-        </div>
-        <button id="login-button" type="submit">
-          Log in
-        </button>
-      </form>
+          <Button variant="primary" type="submit">
+            Log in
+          </Button>
+        </Form.Group>
+      </Form>
     </div>
   );
 };
