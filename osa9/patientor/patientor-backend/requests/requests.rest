@@ -1,0 +1,22 @@
+GET http://localhost:3001/api/ping
+
+###
+
+GET http://localhost:3001/api/diagnoses
+
+###
+
+GET http://localhost:3001/api/patients
+
+###
+
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "TEST TEST",
+  "dateOfBirth": "1986-07-03",
+  "ssn": "090797-122D",
+  "gender": "female",
+  "occupation": "TEST"
+}
