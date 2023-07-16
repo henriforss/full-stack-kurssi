@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
-import { Patient } from "../../types";
+import { Diagnose, Patient } from "../../types";
 import { useParams } from "react-router-dom";
 import patientService from "../../services/patients";
+import PatientEntry from "../PatientEntry";
 
-const PatientPage = () => {
+interface Props {
+  diagnoses: Diagnose[];
+}
+
+const PatientPage = ({ diagnoses }: Props) => {
   const { id } = useParams();
-  const [patient, setPatient] = useState<Patient>();
+  const [patient, setPatient] = useState<Patient | null>(null);
 
   useEffect(() => {
     const fetchPatient = async () => {
@@ -17,8 +22,8 @@ const PatientPage = () => {
     void fetchPatient();
   }, [id]);
 
-  console.log(id);
-  console.log(patient);
+  // console.log(id);
+  // console.log(patient);
 
   return (
     <div>
@@ -30,6 +35,14 @@ const PatientPage = () => {
         <br />
         occupation: {patient?.occupation}
       </p>
+      <h3>Add entry</h3>
+
+      {/* TODO: the rest */}
+
+      <h3>Entries</h3>
+      {patient?.entries.map((entry, i) => (
+        <PatientEntry key={i} entry={entry} diagnoses={diagnoses} />
+      ))}
     </div>
   );
 };
