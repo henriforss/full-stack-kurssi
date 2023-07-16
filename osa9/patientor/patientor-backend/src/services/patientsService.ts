@@ -1,5 +1,5 @@
-import patientsData from "../../data/patients";
-import { Patient, NonSensitivePatient, newPatient } from "../types";
+import patientsData from "../../data/patients-full";
+import { Patient, NonSensitivePatient, newPatient, newEntry } from "../types";
 import { v1 as uuid } from "uuid";
 
 // console.log(patientsData);
@@ -42,4 +42,29 @@ const getEntryById = (id: string): Patient => {
   }
 };
 
-export default { getEntries, getNonSensitiveEntries, addEntry, getEntryById };
+// Add new diagnose entry to patient
+const addDiagnoseEntry = (entry: newEntry, id: string) => {
+  const entryId: string = uuid();
+
+  const newEntry = {
+    id: entryId,
+    ...entry,
+  };
+
+  const patient = patientsData.find((patient) => patient.id === id);
+
+  if (patient) {
+    patient.entries.push(newEntry);
+    return newEntry;
+  } else {
+    throw new Error("Patient id does not match any patient.");
+  }
+};
+
+export default {
+  getEntries,
+  getNonSensitiveEntries,
+  addEntry,
+  getEntryById,
+  addDiagnoseEntry,
+};
