@@ -5,11 +5,6 @@ interface Props {
   diagnoses: Diagnose[];
 }
 
-interface Props {
-  entry: Entry;
-  diagnoses: Diagnose[];
-}
-
 const assertNever = (value: never): never => {
   throw new Error(
     `Unhandled discriminated union member: ${JSON.stringify(value)}`
@@ -36,11 +31,16 @@ const PatientEntry = ({ entry, diagnoses }: Props) => {
               const codeDescription = diagnoses.find(
                 (obj) => obj.code === code
               );
-              return (
-                <li key={i}>
-                  {code} {codeDescription?.name}
-                </li>
-              );
+
+              if (code) {
+                return (
+                  <li key={i}>
+                    {code} {codeDescription?.name}
+                  </li>
+                );
+              } else {
+                return null;
+              }
             })}
           </ul>
           <p>Health rating: {entry.healthCheckRating}</p>
@@ -65,11 +65,16 @@ const PatientEntry = ({ entry, diagnoses }: Props) => {
               const codeDescription = diagnoses.find(
                 (obj) => obj.code === code
               );
-              return (
-                <li key={i}>
-                  {code} {codeDescription?.name}
-                </li>
-              );
+
+              if (code) {
+                return (
+                  <li key={i}>
+                    {code} {codeDescription?.name}
+                  </li>
+                );
+              } else {
+                return null;
+              }
             })}
           </ul>
           <p>
@@ -97,11 +102,16 @@ const PatientEntry = ({ entry, diagnoses }: Props) => {
               const codeDescription = diagnoses.find(
                 (obj) => obj.code === code
               );
-              return (
-                <li key={i}>
-                  {code} {codeDescription?.name}
-                </li>
-              );
+
+              if (code) {
+                return (
+                  <li key={i}>
+                    {code} {codeDescription?.name}
+                  </li>
+                );
+              } else {
+                return null;
+              }
             })}
           </ul>
           <p>

@@ -108,7 +108,8 @@ const parseDischarge = (
     !("date" in discharge) ||
     !("criteria" in discharge) ||
     !isString(discharge.date) ||
-    !isString(discharge.criteria)
+    !isString(discharge.criteria) ||
+    !isDate(discharge.date)
   ) {
     throw new Error("Incorrect or missing discharge.");
   }

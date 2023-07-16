@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Diagnose, Patient } from "../../types";
 import { useParams } from "react-router-dom";
 import patientService from "../../services/patients";
+import { Diagnose, Patient } from "../../types";
+import NewEntryForm from "../NewEntryForm";
 import PatientEntry from "../PatientEntry";
 
 interface Props {
@@ -11,6 +12,9 @@ interface Props {
 const PatientPage = ({ diagnoses }: Props) => {
   const { id } = useParams();
   const [patient, setPatient] = useState<Patient | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [option, setOption] = useState<string>("HealthCheck");
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchPatient = async () => {
@@ -24,6 +28,8 @@ const PatientPage = ({ diagnoses }: Props) => {
 
   // console.log(id);
   // console.log(patient);
+  // console.log(option);
+  // console.log(modalOpen);
 
   return (
     <div>
@@ -37,7 +43,29 @@ const PatientPage = ({ diagnoses }: Props) => {
       </p>
       <h3>Add entry</h3>
 
-      {/* TODO: the rest */}
+      {error && (
+        <p style={{ backgroundColor: "pink", padding: "10px" }}>{error}</p>
+      )}
+
+      <select onChange={(e) => setOption(e.target.value)}>
+        <option value="HealthCheck">Health check</option>
+        <option value="OccupationalHealthcare">Occupational healthcare</option>
+        <option value="Hospital">Hospital</option>
+      </select>
+
+      <button onClick={() => setModalOpen(true)}>Select</button>
+
+      {modalOpen && (
+        <NewEntryForm
+          id={id}
+          option={option}
+          patient={patient}
+          setPatient={setPatient}
+          error={error}
+          setError={setError}
+          setModalOpen={setModalOpen}
+        />
+      )}
 
       <h3>Entries</h3>
       {patient?.entries.map((entry, i) => (
